@@ -1,36 +1,36 @@
 ;;========================================================================================
 ;; UI
 ;;========================================================================================
-;; (if (display-graphic-p)
-;;     (progn
-;;       (setq initial-frame-alist
-;;             '(
-;;               (width . 106) ; chars
-;;               (height . 47) ; lines
-;;               (left . 50)
-;;               (top . 50)))
-;;       (setq default-frame-alist
-;;             '(
-;;               (width . 106)
-;;               (height . 47)
-;;               (left . 50)
-;;               (top . 50)))))
+;;(if (display-graphic-p)
+;;    (progn
+;;      (setq initial-frame-alist
+;;            '(
+;;              (width . 106) ; chars
+;;              (height . 47) ; lines
+;;              (left . 50)
+;;              (top . 50)))
+;;      (setq default-frame-alist
+;;            '(
+;;              (width . 106)
+;;              (height . 47)
+;;              (left . 50)
+;;              (top . 50)))))
 
-;; ;;中英文等宽设置
-;; (defun set-font (english chinese english-size chinese-size)
-;;   (set-face-attribute 'default nil :font
-;;                       (format   "%s:pixelsize=%d"  english english-size))
-;;   (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;     (set-fontset-font (frame-parameter nil 'font) charset
-;;                       (font-spec :family chinese :size chinese-size))))
-
-;; (set-font "Source Code Pro" "STkaiti" 13 16)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-table ((t (:foreground "#6c71c4" :family "Ubuntu Mono")))))
+;;中英文等宽设置
+;;(defun set-font (english chinese english-size chinese-size)
+;;  (set-face-attribute 'default nil :font
+;;                      (format   "%s:pixelsize=%d"  english english-size))
+;;  (dolist (charset '(kana han symbol cjk-misc bopomofo))
+;;    (set-fontset-font (frame-parameter nil 'font) charset
+;;                      (font-spec :family chinese :size chinese-size))))
+;;
+;;(set-font "Source Code Pro" "STkaiti" 13 16)
+;;(custom-set-faces
+;; ;; custom-set-faces was added by Custom.
+;; ;; If you edit it by hand, you could mess it up, so be careful.
+;; ;; Your init file should contain only one such instance.
+;; ;; If there is more than one, they won't work right.
+;; '(org-table ((t (:foreground "#6c71c4" :family "Ubuntu Mono")))))
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
@@ -46,21 +46,21 @@
 (setq-default cursor-type 'bar)
 (add-hook 'prog-hook 'prettify-symbols-mode)
 
-;; (when sys/mac-x-p
-;;   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-;;   (add-to-list 'default-frame-alist '(ns-appearance . dark))
-;;   (add-hook 'after-load-theme-hook
-;;             (lambda ()
-;; 	      (let ((bg (frame-parameter nil 'background-mode)))
-;;                 (set-frame-parameter nil 'ns-appearance bg)
-;;                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
+(defun mac-x-dark-theme ()
+(when sys/mac-x-p
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+	      (let ((bg (frame-parameter nil 'background-mode)))
+                (set-frame-parameter nil 'ns-appearance bg)
+                (setcdr (assq 'ns-appearance default-frame-alist) bg))))))
 
-(use-package doom-themes)
 
 ;;Titlebar
 (defun doom-init ()
   ;;安装doom主题样式
-  ;;(load-theme 'doom-one t)
+  (load-theme 'doom-one)
   (toggle-frame-maximized)
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
@@ -71,7 +71,10 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(doom-init)
+(use-package doom-themes
+  :config
+  (doom-init))
+
 
 ;;显示行号
 (if (fboundp 'display-line-numbers-mode)

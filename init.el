@@ -53,6 +53,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   "Recursive add directories to `load-path'."
   (let ((default-directory (file-name-as-directory dir)))
     (add-to-list 'load-path dir)
+    ;;(byte-recompile-directory (expand-file-name dir) 0)
     (normal-top-level-add-subdirs-to-load-path)))
 (add-subdirs-to-load-path "~/.emacs.d/elisp")
 
@@ -68,7 +69,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 ;; 安装这个叫做package-install的神器
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-(require 'use-package-ensure)
+(require 'use-package-ensure)'-
 (setq use-package-always-ensure t)
 
 ;;=============================================
@@ -78,3 +79,4 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-funcs)
 (require 'init-ui)
 (require 'init-pkgs)
+(require 'init-lsp)
