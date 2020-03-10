@@ -79,4 +79,5 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-funcs)
 (require 'init-ui)
 (require 'init-pkgs)
-(require 'init-lsp)
+;;(require 'init-lsp)
+(require 'init-lsp-java)
