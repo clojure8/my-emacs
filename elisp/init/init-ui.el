@@ -1,36 +1,11 @@
 ;;========================================================================================
 ;; UI
 ;;========================================================================================
-;;(if (display-graphic-p)
-;;    (progn
-;;      (setq initial-frame-alist
-;;            '(
-;;              (width . 106) ; chars
-;;              (height . 47) ; lines
-;;              (left . 50)
-;;              (top . 50)))
-;;      (setq default-frame-alist
-;;            '(
-;;              (width . 106)
-;;              (height . 47)
-;;              (left . 50)
-;;              (top . 50)))))
-
-;;中英文等宽设置
-;;(defun set-font (english chinese english-size chinese-size)
-;;  (set-face-attribute 'default nil :font
-;;                      (format   "%s:pixelsize=%d"  english english-size))
-;;  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;    (set-fontset-font (frame-parameter nil 'font) charset
-;;                      (font-spec :family chinese :size chinese-size))))
-;;
-;;(set-font "Source Code Pro" "STkaiti" 13 16)
-;;(custom-set-faces
-;; ;; custom-set-faces was added by Custom.
-;; ;; If you edit it by hand, you could mess it up, so be careful.
-;; ;; Your init file should contain only one such instance.
-;; ;; If there is more than one, they won't work right.
-;; '(org-table ((t (:foreground "#6c71c4" :family "Ubuntu Mono")))))
+(setq visible-bell nil
+      ring-bell-function 'flash-mode-line)
+(defun flash-mode-line ()
+  (invert-face 'mode-line)
+  (run-with-timer 0.1 nil #'invert-face 'mode-line))
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
@@ -46,41 +21,33 @@
 (setq-default cursor-type 'bar)
 (add-hook 'prog-hook 'prettify-symbols-mode)
 
-(defun mac-x-dark-theme ()
-(when sys/mac-x-p
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (add-hook 'after-load-theme-hook
-            (lambda ()
-	      (let ((bg (frame-parameter nil 'background-mode)))
-                (set-frame-parameter nil 'ns-appearance bg)
-                (setcdr (assq 'ns-appearance default-frame-alist) bg))))))
+;; (when (memq window-system '(mac ns))
+;;   (add-to-list 'default-frame-alist '(ns-appearance . light)) ;; {light, dark}
+;;   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
+  ;; (add-hook 'after-load-theme-hook
+  ;;           (lambda ()
+  ;; 	              (let ((bg (frame-parameter nil 'background-mode)))
+  ;;               (set-frame-parameter nil 'ns-appearance bg)
+  ;;               (setcdr (assq 'ns-appearance default-frame-alist) bg))))))
 
 
-;;Titlebar
-(defun doom-init ()
-  ;;安装doom主题样式
-  (load-theme 'doom-one t)
-  (toggle-frame-maximized)
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
-
-  )
-
-(use-package doom-themes
+(use-package eclipse-theme
   :config
-  (doom-init))
-
+  (load-theme 'eclipse t))
 
 ;;显示行号
 (global-linum-mode 1)
 
+(use-package powerline
+  :after (eclipse-theme)
+  :config
+  (setq powerline-display-buffer-size nil)
+  (setq powerline-display-mule-info nil)
+  (setq powerline-display-hud nil)
+  (when (display-graphic-p)
+    (powerline-default-theme)
+    (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
 
+(toggle-frame-maximized)
 
 (provide 'init-ui)

@@ -16,7 +16,7 @@
 ;; -CheckVer
 
 ;; BetterGC
-(defvar better-gc-cons-threshold 67108864 ; 64mb
+(defvar better-gc-cons-threshold 335544320
   "The default value to use for `gc-cons-threshold'.
 
 If you experience freezing, decrease this.  If you experience stuttering, increase this.")
@@ -62,15 +62,22 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 ;;========================================================================================
 ;; Package
 ;;========================================================================================
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq package-archives '(
+                         ;;("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                         ;;("melpa" . "http://elpa.emacs-china.org/melpa/")
+       ("melpa" . "https://mirrors.163.com/elpa/melpa/")
+          ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
 (package-initialize)
+
 ;; 安装这个叫做package-install的神器
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package-ensure)'-
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+(require 'undo-tree)
 
 ;;=============================================
 ;; require config
@@ -78,6 +85,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-base)
 (require 'init-funcs)
 (require 'init-ui)
-(require 'init-pkgs)
-;;(require 'init-lsp)
-(require 'init-lsp-java)
+(require 'init-pkgs2)
+;(require 'init-pkgs)
+;;(require 'init-lsp-java)

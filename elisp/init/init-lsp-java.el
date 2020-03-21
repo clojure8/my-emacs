@@ -1,4 +1,6 @@
 
+(use-package go-mode)
+
 (use-package lsp-mode
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   :init (setq lsp-keymap-prefix "s-l")
@@ -9,7 +11,6 @@
   :commands lsp)
 
 (use-package lsp-java)
-(use-package all-the-icons)
 
 ;; optionallyq
 (use-package lsp-ui :commands lsp-ui-mode)
@@ -31,7 +32,8 @@
   ((java-mode . dap-mode)
    (java-mode . dap-ui-mode))
   :config
-  (require 'dap-java))
+  (require 'dap-java)
+  (require 'dap-go))
 
 (use-package which-key
   :config
