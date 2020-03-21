@@ -1,0 +1,32 @@
+
+* 第一天
+添加如下配置:
+- company
+- swiper
+- counsel
+- youdao
+- projectile
+- evil
+- evil-collection
+- general
+- magit
+- anzu
+- expand-region
+- org-bullets
+
+* 第N天目标
+
+** TODO Term的自动打开和关闭问题？
+- 快捷键快速打开当前文件所在目录的term
+- exit退出term后，自动close window
+- 快捷键隐藏term，并且切换鼠标focus到前一个文件
+
+** TODO autoloads怎么自动生成的？
+** TODO yasnippets和company冲突怎么办？
+** TODO 参考Doom Emacs的代码组织
+
+
+
+
+
+

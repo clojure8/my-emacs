@@ -69,7 +69,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
           ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
 (package-initialize)
-
 ;; 安装这个叫做package-install的神器
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -77,7 +76,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-(require 'undo-tree)
 
 ;;=============================================
 ;; require config
@@ -85,6 +83,5 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-base)
 (require 'init-funcs)
 (require 'init-ui)
-(require 'init-pkgs2)
-;(require 'init-pkgs)
+(require 'init-pkgs)
 ;;(require 'init-lsp-java)
