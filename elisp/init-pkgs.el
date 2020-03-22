@@ -1,6 +1,11 @@
 (use-package better-defaults)
 (use-package posframe)
 
+(use-package dumb-jump
+  :config
+  (setq dumb-jump-default-project "~/Workspace")
+  (setq dumb-jump-selector 'ivy))
+
 (use-package company
   :config
   (global-company-mode t))
@@ -124,13 +129,31 @@
     "pf" 'counsel-projectile-find-file
     "pp" 'counsel-projectile-switch-project
     "pt" 'treemacs
+    "jj" 'dumb-jump-go
+    "jb" 'dumb-jump-back
     )
   (global-set-key (kbd "s-/") 'comment-line)
   (global-set-key (kbd "C-c C-c") 'er/expand-region))
 
+(use-package all-the-icons)
 
-(use-package org-bullets
-  :hook ((org-mode . org-bullets-mode)
-         (org-mode . org-indent-mode)))
+(use-package fuz)
 
-(provide 'init-pkgs2)
+;; (use-package ivy-fuz
+;;   :ensure t
+;;   :demand t
+;;   :after ivy
+;;   :custom
+;;   (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+;;   (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
+;;   :config
+;;   (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
+
+(use-package which-key
+  :config
+  (which-key-mode t))
+
+(use-package better-shell
+  :bind (("C-'" . better-shell-shell)))
+
+(provide 'init-pkgs)

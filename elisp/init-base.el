@@ -29,9 +29,6 @@
 ;;
 
 ;;; Code:
-(defmacro csetq (variable value)
-  `(funcall (or (get ',variable 'custom-set) 'set-default) ',variable ,value))
-
 (eval-when-compile
   (require 'init-const)
   (require 'init-custom))

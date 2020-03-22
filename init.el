@@ -1,4 +1,6 @@
 ;;; init.el --- -*- lexical-binding: t -*-
+(defmacro csetq (variable value)
+  `(funcall (or (get ',variable 'custom-set) 'set-default) ',variable ,value))
 
 ;; CheckVer
 (cond ((version< emacs-version "26.1")
@@ -69,14 +71,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
           ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
 (package-initialize)
-;; 安装这个叫做package-install的神器
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package-ensure)
+  (package-install 'use-package)
+  )
 (setq use-package-always-ensure t)
-
-
 ;;=============================================
 ;; require config
 ;;=============================================
@@ -84,4 +83,5 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-funcs)
 (require 'init-ui)
 (require 'init-pkgs)
+(require 'init-org)
 ;;(require 'init-lsp-java)

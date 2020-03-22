@@ -14,21 +14,21 @@
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font) charset
                       (font-spec :family chinese :size chinese-size))))
-;;(set-font "Source Code Pro" "STkaiti" 13 15)
+;; (set-font "Source Code Pro" "STkaiti" 13 15)
+(csetq line-spacing 0.308)
+(set-font "Hack" "STkaiti" 12 14)
 ;; (let ((font "Monofur"))
 ;;   (set-font font font 14 14))
 (csetq org-table '((t (:foreground "#6c71c4" :family "Ubuntu Mono"))))
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
-;;去滚动条
 (scroll-bar-mode -1)
-;;去工具栏
 (tool-bar-mode -1)
-;;去开始画面
 (setq inhibit-splash-screen t)
-;;去下面的状态栏
 ;;(setq-default mode-line-format nil)
+(global-hl-line-mode t)
+
 ;;改鼠标为光标
 (setq-default cursor-type 'bar)
 (add-hook 'prog-hook 'prettify-symbols-mode)
@@ -60,6 +60,17 @@
     (powerline-default-theme)
     (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
 
-(toggle-frame-maximized)
+;; (toggle-frame-maximized)
+(use-package beacon
+  :config
+  (beacon-mode 1))
+
+(use-package hungry-delete
+  :config
+  (global-hungry-delete-mode t))
+
+(use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode t))
 
 (provide 'init-ui)
