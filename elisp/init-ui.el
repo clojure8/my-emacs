@@ -7,7 +7,7 @@
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
 
-;;中英文等宽设置
+;;中英文字体设置
 (defun set-font (english chinese english-size chinese-size)
   (set-face-attribute 'default nil :font
                       (format   "%s:pixelsize=%d"  english english-size))
@@ -17,10 +17,8 @@
 ;; (set-font "Source Code Pro" "STkaiti" 13 15)
 (csetq line-spacing 0.308)
 (set-font "Hack" "STkaiti" 12 14)
-;; (let ((font "Monofur"))
-;;   (set-font font font 14 14))
-(csetq org-table '((t (:foreground "#6c71c4" :family "Ubuntu Mono"))))
 
+(csetq tab-width 4)
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
 (scroll-bar-mode -1)
@@ -43,22 +41,49 @@
 ;;                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
 
 
-(use-package eclipse-theme
-  :config
-  (load-theme 'eclipse t))
+;; (use-package eclipse-theme
+;;   :config
+;;   (load-theme 'eclipse t))
+
+(use-package spacemacs-theme
+  :defer t
+  :init
+  (load-theme 'spacemacs-dark t))
+
+;; (use-package monokai-theme
+;;   :defer t
+;;   :init
+;;   (load-theme 'monokai t))
 
 ;;显示行号
-(global-linum-mode 1)
+(global-linum-mode t)
 
-(use-package powerline
-  :after (eclipse-theme)
+;; (use-package powerline
+;;   :after (eclipse-theme)
+;;   :config
+;;   (setq powerline-display-buffer-size nil)
+;;   (setq powerline-display-mule-info nil)
+;;   (setq powerline-display-hud nil)
+;;   (when (display-graphic-p)
+;;     (powerline-default-theme)
+;;     (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
+
+;; (use-package    feebleline
+;;   :ensure       t
+;;   :config       (setq feebleline-msg-functions
+;;                       '((feebleline-line-number         :post "" :fmt "%5s")
+;;                         (feebleline-column-number       :pre ":" :fmt "%-2s")
+;;                         (feebleline-file-directory      :face feebleline-dir-face :post "")
+;;                         (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
+;;                         (feebleline-file-modified-star  :face font-lock-warning-face :post "")
+;;                         (feebleline-git-branch          :face feebleline-git-face :pre " : ")
+;;                         (feebleline-project-name        :align right)))
+;;   (feebleline-mode 1))
+
+(use-package mini-modeline
   :config
-  (setq powerline-display-buffer-size nil)
-  (setq powerline-display-mule-info nil)
-  (setq powerline-display-hud nil)
-  (when (display-graphic-p)
-    (powerline-default-theme)
-    (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
+  (mini-modeline-mode 1))
+
 
 ;; (toggle-frame-maximized)
 (use-package beacon
@@ -70,7 +95,17 @@
   (global-hungry-delete-mode t))
 
 (use-package aggressive-indent
-  :config
-  (global-aggressive-indent-mode t))
+  :hook
+  (emacs-lisp-mode . aggressive-indent-mode))
+
+(use-package all-the-icons
+  :defer 0.5)
+
+;; (use-package all-the-icons-ivy
+;;   :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+;;   :config
+;;   (setq all-the-icons-ivy-file-commands
+;;         '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir))
+;;   )
 
 (provide 'init-ui)

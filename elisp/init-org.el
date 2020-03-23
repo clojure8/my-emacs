@@ -1,6 +1,7 @@
 
 ;;custom org mode
 (csetq org-directory "~/orgs")
+(csetq org-table '((t (:foreground "#6c71c4" :family "Ubuntu Mono"))))
 (csetq org-default-notes-file (concat org-directory "/notes.org"))
 (csetq org-download-image-dir "~/Downloads")
 (csetq org-agenda-files

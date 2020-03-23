@@ -16,6 +16,7 @@
 
 * 第N天目标
 ** TODO 参考Doom Emacs的代码组织
+*** DONE 抄了autoload的生成和加载逻辑
 ** TODO autoloads怎么自动生成的？
 ** TODO 快速在window中切换
 - 绑定hjkl快速在四个窗口中切换
@@ -25,6 +26,7 @@
 - 快捷键快速打开当前文件所在目录的term
 - exit退出term后，自动close window
 - 快捷键隐藏term，并且切换鼠标focus到前一个文件
+- pop-shell的问题。需要添加hook，关闭一些不需要的东西，比如行号、高亮、evil等等。
 ** TODO yasnippets和company冲突怎么办？
 ** TODO 写一个自己的ivy-anything
 ** TODO OrgMode怎么使用

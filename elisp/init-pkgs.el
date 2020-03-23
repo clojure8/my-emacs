@@ -1,5 +1,26 @@
+
 (use-package better-defaults)
+
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+
 (use-package posframe)
+
+(use-package shell-pop
+  :init
+  (csetq shell-pop-default-directory "/Users/peterwu/.emacs.d")
+  (csetq shell-pop-shell-type (quote ("multi-term" "*multi-term*" (lambda nil (multi-term)))))
+  (csetq shell-pop-term-shell "/usr/local/bin/zsh")
+  (csetq shell-pop-window-size 30)
+  (csetq shell-pop-full-span t)
+  (csetq shell-pop-window-position "bottom")
+  (csetq shell-pop-autocd-to-working-dir t)
+  (csetq shell-pop-restore-window-configuration t)
+  (csetq shell-pop-cleanup-buffer-at-process-exit t)
+  :hook (shell-pop-in-after . (lambda () (linum-mode -1))))
+
+(use-package emojify)
 
 (use-package dumb-jump
   :config
@@ -34,7 +55,11 @@
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  :config
+  (setq counsel-describe-function-function #'helpful-callable
+        counsel-describe-variable-function #'helpful-variable)
+  )
 
 
 (use-package youdao-dictionary
@@ -84,9 +109,11 @@
 	  (youdao-dictionary-search-at-point-tooltip))
       (youdao-dictionary-search-at-point))))
 
-(use-package projectile)
+(use-package projectile
+  :init
+  (csetq projectile-project-search-path '("~/Workspace/")))
+
 (use-package counsel-projectile)
-(use-package magit)
 (use-package evil-magit :after (evil magit))
 (use-package anzu)
 (use-package expand-region)
@@ -116,6 +143,7 @@
     "SPC" 'counsel-M-x
     "yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
     "yy" 'my-youdao-search-at-point
+    "ys" 'ivy-yasnippet
     "fr" 'counsel-recentf
     "bb" 'counsel-switch-buffer
     "bl" 'evil-switch-to-windows-last-buffer
@@ -131,23 +159,23 @@
     "pt" 'treemacs
     "jj" 'dumb-jump-go
     "jb" 'dumb-jump-back
+    "sw" 'shell-pop
     )
   (global-set-key (kbd "s-/") 'comment-line)
+  (global-set-key (kbd "s-;") 'yas-expand)
   (global-set-key (kbd "C-c C-c") 'er/expand-region))
-
-(use-package all-the-icons)
 
 (use-package fuz)
 
-;; (use-package ivy-fuz
-;;   :ensure t
-;;   :demand t
-;;   :after ivy
-;;   :custom
-;;   (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
-;;   (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
-;;   :config
-;;   (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
+(use-package ivy-fuz
+  :ensure t
+  :demand t
+  :after ivy
+  :custom
+  (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+  (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
+  :config
+  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
 
 (use-package which-key
   :config
@@ -155,5 +183,33 @@
 
 (use-package better-shell
   :bind (("C-'" . better-shell-shell)))
+
+(use-package eyebrowse)
+(use-package multi-term)
+
+(use-package yasnippet
+  :hook
+  ((prog-mode . yas-minor-mode))
+  :config
+  (yas-reload-all))
+
+(use-package yasnippet-snippets)
+
+(use-package ivy-yasnippet
+  :after yasnippet)
+
+(use-package ivy-explorer
+  :config
+  (ivy-explorer-mode t))
+
+(use-package iedit
+  :bind
+  ("s-d" . iedit-mode))
+
+(use-package popwin)
+
+(use-package ivy-rich
+  :config
+  (ivy-rich-mode 1))
 
 (provide 'init-pkgs)

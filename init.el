@@ -50,16 +50,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
             (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
 ;; -AutoGC
 
-;; LoadPath
-(defun add-subdirs-to-load-path (dir)
-  "Recursive add directories to `load-path'."
-  (let ((default-directory (file-name-as-directory dir)))
-    (add-to-list 'load-path dir)
-    ;;(byte-recompile-directory (expand-file-name dir) 0)
-    (normal-top-level-add-subdirs-to-load-path)))
-(add-subdirs-to-load-path "~/.emacs.d/elisp")
-
-;; -LoadPath
 
 ;;========================================================================================
 ;; Package
@@ -67,21 +57,74 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (setq package-archives '(
                          ;;("gnu"   . "http://elpa.emacs-china.org/gnu/")
                          ;;("melpa" . "http://elpa.emacs-china.org/melpa/")
-       ("melpa" . "https://mirrors.163.com/elpa/melpa/")
-          ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
+                         ("melpa" . "https://mirrors.163.com/elpa/melpa/")
+                         ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package)
-  )
+  (package-install 'use-package))
+
 (setq use-package-always-ensure t)
+(use-package s)
+(use-package f)
+(use-package dash)
+(use-package language-id)
+
+;;================================================================================
+;;; LoadPath
+;;================================================================================
+(require 'cl-lib)
+(require 'autoload)
+
+(defun refresh-load-path (&optional dir)
+  "Refresh the load path of `site-lisp'."
+  (interactive)
+  (let ((default-directory (file-name-as-directory (or dir *site-lisp-directory*))))
+    (push default-directory load-path)
+    (normal-top-level-add-subdirs-to-load-path)))
+
+(defun generate-autoloads (&optional dir target)
+  "Generate autoload files for dir"
+  (interactive)
+  (with-temp-file (or target *extra-autoloads-file*)
+    (cl-loop with generated-autoload-file = nil
+             with dir = (or dir *site-lisp-directory*)
+             with inhibit-message = t
+             for f in (directory-files-recursively
+                       dir
+                       "\\.el$")
+             for file = (file-truename f)
+             for generated-autoload-load-name = (file-name-sans-extension
+                                                 file)
+             do (autoload-generate-file-autoloads file (current-buffer)))
+    (cl-loop with cache = nil
+             with load-path = (refresh-load-path dir)
+             while (re-search-forward "^\\s-*(autoload\\s-+'[^ ]+\\s-+\"\\([^\"]*\\)\"" nil :no-error)
+             for path = (match-string 1)
+             do (replace-match
+                 (or (cdr (assoc path cache))
+                     (when-let* ((libpath (locate-library path))
+                                 (libpath (file-name-sans-extension libpath)))
+                       (push (cons path (abbreviate-file-name libpath)) cache)
+                       libpath)
+                     path)
+                 :fixed-case :literal nil 1))))
+
+(refresh-load-path "~/.emacs.d/elisp")
+(generate-autoloads "~/.emacs.d/elisp" "~/.emacs.d/loaddefs.el")
+(load (expand-file-name "~/.emacs.d/loaddefs.el") t t)
+
 ;;=============================================
 ;; require config
 ;;=============================================
+(require 'straight)
+(use-package el-patch)
+
 (require 'init-base)
 (require 'init-funcs)
 (require 'init-ui)
 (require 'init-pkgs)
 (require 'init-org)
-;;(require 'init-lsp-java)
+(require 'init-lsp-java)
+(require 'init-treemacs)
