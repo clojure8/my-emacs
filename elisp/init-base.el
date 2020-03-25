@@ -27,6 +27,7 @@
 ;;
 ;; Better defaults.
 ;;
+(defconst *my/emacs-cache* "~/.emacs.d/.cache/")
 
 ;;; Code:
 (eval-when-compile

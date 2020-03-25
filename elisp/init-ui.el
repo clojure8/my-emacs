@@ -16,6 +16,7 @@
                       (font-spec :family chinese :size chinese-size))))
 ;; (set-font "Source Code Pro" "STkaiti" 13 15)
 (csetq line-spacing 0.308)
+;; (set-font "monospace" "STkaiti" 13 13)
 (set-font "Hack" "STkaiti" 12 14)
 
 (csetq tab-width 4)
@@ -36,7 +37,7 @@
 ;;   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 ;;   (add-hook 'after-load-theme-hook
 ;;             (lambda ()
-;; 	      (let ((bg (frame-parameter nil 'background-mode)))
+;; 	          (let ((bg (frame-parameter nil 'background-mode)))
 ;;                 (set-frame-parameter nil 'ns-appearance bg)
 ;;                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
 
@@ -48,7 +49,9 @@
 (use-package spacemacs-theme
   :defer t
   :init
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'spacemacs-dark t)
+  ;; (load-theme 'spacemacs-light t)
+  )
 
 ;; (use-package monokai-theme
 ;;   :defer t
@@ -58,15 +61,26 @@
 ;;显示行号
 (global-linum-mode t)
 
-;; (use-package powerline
-;;   :after (eclipse-theme)
+(use-package powerline-evil
+  :after (evil evil-collection)
+  :config
+  (setq powerline-display-buffer-size nil)
+  (setq powerline-display-mule-info nil)
+  (setq powerline-display-hud nil)
+  (when (display-graphic-p)
+    (powerline-default-theme)
+    (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
+
+;; (use-package telephone-line
+;;   :init
+;;   (setq telephone-line-primary-left-separator 'telephone-line-gradient
+;;         telephone-line-secondary-left-separator 'telephone-line-nil
+;;         telephone-line-primary-right-separator 'telephone-line-gradient
+;;         telephone-line-secondary-right-separator 'telephone-line-nil)
+;;   (setq ;;telephone-line-height 24
+;;    telephone-line-evil-use-short-tag t)
 ;;   :config
-;;   (setq powerline-display-buffer-size nil)
-;;   (setq powerline-display-mule-info nil)
-;;   (setq powerline-display-hud nil)
-;;   (when (display-graphic-p)
-;;     (powerline-default-theme)
-;;     (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
+;;   (telephone-line-mode 1))
 
 ;; (use-package    feebleline
 ;;   :ensure       t
@@ -80,19 +94,20 @@
 ;;                         (feebleline-project-name        :align right)))
 ;;   (feebleline-mode 1))
 
-(use-package mini-modeline
-  :config
-  (mini-modeline-mode 1))
+;; (use-package mini-modeline
+;;   :config
+;;   (mini-modeline-mode 1))
 
+;; (require 'awesome-tray)
+;; (csetq awesome-tray-mode-line-active-color  "#3366ff")
+;; (csetq awesome-tray-active-modules
+;;        '("location" "parent-dir" "mode-name" "awesome-tab" ))
+;; (awesome-tray-mode 1)
 
 ;; (toggle-frame-maximized)
 (use-package beacon
   :config
   (beacon-mode 1))
-
-(use-package hungry-delete
-  :config
-  (global-hungry-delete-mode t))
 
 (use-package aggressive-indent
   :hook
@@ -107,5 +122,11 @@
 ;;   (setq all-the-icons-ivy-file-commands
 ;;         '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir))
 ;;   )
+
+;; (require 'awesome-tab)
+;; (setq awesome-tab-height 100)
+;; (setq awesome-tab-icon-height 0.8)
+;; (awesome-tab-mode t)
+
 
 (provide 'init-ui)

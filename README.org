@@ -1,6 +1,6 @@
 #+startup: showall hidestars
 * 第一天
-添加如下配置:
+** 添加如下配置:
 - company
 - swiper
 - counsel
@@ -17,7 +17,8 @@
 * 第N天目标
 ** TODO 参考Doom Emacs的代码组织
 *** DONE 抄了autoload的生成和加载逻辑
-** TODO autoloads怎么自动生成的？
+*** TODO 复用doom-emacs的模块实现
+** DONE autoloads怎么自动生成的？
 ** TODO 快速在window中切换
 - 绑定hjkl快速在四个窗口中切换
 - 绑定一个快捷键在两个窗口中互相切换

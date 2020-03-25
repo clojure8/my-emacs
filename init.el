@@ -2,6 +2,9 @@
 (defmacro csetq (variable value)
   `(funcall (or (get ',variable 'custom-set) 'set-default) ',variable ,value))
 
+(defvar gc-cons-threshold-up-limit (* 100 1024 1024))
+(defvar gc-cons-threshold-default (* 20 1024 1024))
+
 ;; CheckVer
 (cond ((version< emacs-version "26.1")
        (warn "M-EMACS requires Emacs 26.1 and above!"))
@@ -18,9 +21,8 @@
 ;; -CheckVer
 
 ;; BetterGC
-(defvar better-gc-cons-threshold 335544320
+(defvar better-gc-cons-threshold (* 256 1024 1024)
   "The default value to use for `gc-cons-threshold'.
-
 If you experience freezing, decrease this.  If you experience stuttering, increase this.")
 
 (add-hook 'emacs-startup-hook
@@ -76,6 +78,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 ;;================================================================================
 (require 'cl-lib)
 (require 'autoload)
+(with-eval-after-load 'gnutls
+  (add-to-list 'gnutls-trustfiles "/usr/local/etc/libressl/cert.pem"))
 
 (defun refresh-load-path (&optional dir)
   "Refresh the load path of `site-lisp'."
@@ -128,3 +132,4 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-org)
 (require 'init-lsp-java)
 (require 'init-treemacs)
+(require 'init-evil)

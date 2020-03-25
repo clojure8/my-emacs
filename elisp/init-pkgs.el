@@ -1,4 +1,58 @@
+(use-package smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char)
+		 ("C-d" . smart-hungry-delete-forward-char))
+  :defer nil ;; dont defer so we can add our functions to hooks 
+  :config (smart-hungry-delete-add-default-hooks)
+  )
 
+;;;###autoload
+(defun my-string-inflection-cycle-auto ()
+  "switching by major-mode"
+  (interactive)
+  (cond
+   ;; for emacs-lisp-mode
+   ((eq major-mode 'emacs-lisp-mode)
+    (string-inflection-all-cycle))
+   ;; for python
+   ((eq major-mode 'python-mode)
+    (string-inflection-python-style-cycle))
+   ;; for java
+   ((eq major-mode 'java-mode)
+    (string-inflection-java-style-cycle))
+   (t
+    ;; default
+    (string-inflection-ruby-style-cycle))))
+
+(use-package drag-stuff
+  :hook
+  (java-mode . drag-stuff-mode)
+  :config
+  (drag-stuff-define-keys))
+
+
+(use-package string-inflection
+  :config
+  ;; C-q C-u is the key bindings similar to Vz Editor.
+  (global-unset-key (kbd "C-q"))
+  (global-set-key (kbd "C-q C-u") 'my-string-inflection-cycle-auto))
+
+(use-package ivy)
+
+(use-package projectile)
+
+(use-package ivy-xref
+  :init
+  ;; xref initialization is different in Emacs 27 - there are two different
+  ;; variables which can be set rather than just one
+  (when (>= emacs-major-version 27)
+    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
+  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
+  ;; as well
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+
+(use-package helm)
 (use-package better-defaults)
 
 (use-package editorconfig
@@ -61,7 +115,6 @@
         counsel-describe-variable-function #'helpful-variable)
   )
 
-
 (use-package youdao-dictionary
   :ensure t
   :init
@@ -71,12 +124,12 @@
 
   ;; (setq posframe-arghandler #'my-pyosframe-arghandler)
   :functions (posframe-show
-	      posframe-hide)
+	          posframe-hide)
   :commands (youdao-dictionary-mode
-	     youdao-dictionary--region-or-word
-	     youdao-dictionary--format-result)
+	         youdao-dictionary--region-or-word
+	         youdao-dictionary--format-result)
   :bind (("C-c y" . my-youdao-search-at-point)
-	 ("C-c Y" . youdao-dictionary-search-at-point))
+	     ("C-c Y" . youdao-dictionary-search-at-point))
   :config
   ;; Cache documents
   (setq url-automatic-caching t)
@@ -89,24 +142,24 @@
       "Search word at point and display result with posframe."
       (interactive)
       (let ((word (youdao-dictionary--region-or-word)))
-	(if word
-	    (progn
-	      (posframe-show "youdao-buffer"
-			     :foreground-color "green"
-			     :background-color "#222"
-			     :string (youdao-dictionary--format-result word)
-			     :position (point))
-	      (unwind-protect
-		  (push (read-event) unread-command-events)
-		(posframe-hide "youdao-buffer")))
-	  (message "Nothing to look up")))))
+	    (if word
+	        (progn
+	          (posframe-show "youdao-buffer"
+			                 :foreground-color "green"
+			                 :background-color "#222"
+			                 :string (youdao-dictionary--format-result word)
+			                 :position (point))
+	          (unwind-protect
+		          (push (read-event) unread-command-events)
+		        (posframe-hide "youdao-buffer")))
+	      (message "Nothing to look up")))))
 
   (defun my-youdao-search-at-point ()
     (interactive)
     (if (display-graphic-p)
-	(if (fboundp 'youdao-dictionary-search-at-point-posframe)
-	    (youdao-dictionary-search-at-point-posframe)
-	  (youdao-dictionary-search-at-point-tooltip))
+	    (if (fboundp 'youdao-dictionary-search-at-point-posframe)
+	        (youdao-dictionary-search-at-point-posframe)
+	      (youdao-dictionary-search-at-point-tooltip))
       (youdao-dictionary-search-at-point))))
 
 (use-package projectile
@@ -118,64 +171,17 @@
 (use-package anzu)
 (use-package expand-region)
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1))
-
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-(use-package general
-  :ensure t
-  :config
-  (general-create-definer spc-leader-def
-    :states '(normal insert visual emacs)
-    :prefix "<SPC>"
-    :non-normal-prefix "C-,")
-  (spc-leader-def
-    "SPC" 'counsel-M-x
-    "yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
-    "yy" 'my-youdao-search-at-point
-    "ys" 'ivy-yasnippet
-    "fr" 'counsel-recentf
-    "bb" 'counsel-switch-buffer
-    "bl" 'evil-switch-to-windows-last-buffer
-    "ff" 'find-file
-    "fs" 'swiper
-    "bk" 'kill-current-buffer
-    "gs" 'magit-status
-    "gd" 'magit-dispatch
-    "ar" 'anzu-replace-at-cursor-thing
-    "aa" 'anzu-query-replace-at-cursor
-    "pf" 'counsel-projectile-find-file
-    "pp" 'counsel-projectile-switch-project
-    "pt" 'treemacs
-    "jj" 'dumb-jump-go
-    "jb" 'dumb-jump-back
-    "sw" 'shell-pop
-    )
-  (global-set-key (kbd "s-/") 'comment-line)
-  (global-set-key (kbd "s-;") 'yas-expand)
-  (global-set-key (kbd "C-c C-c") 'er/expand-region))
-
 (use-package fuz)
 
-(use-package ivy-fuz
-  :ensure t
-  :demand t
-  :after ivy
-  :custom
-  (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
-  (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
-  :config
-  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
+;; (use-package ivy-fuz
+;;   :ensure t
+;;   :demand t
+;;   :after ivy
+;;   :custom
+;;   (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+;;   (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
+;;   :config
+;;   (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
 
 (use-package which-key
   :config
@@ -211,5 +217,6 @@
 (use-package ivy-rich
   :config
   (ivy-rich-mode 1))
+
 
 (provide 'init-pkgs)

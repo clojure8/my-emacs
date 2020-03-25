@@ -3,24 +3,21 @@
   (interactive)
   (insert "private static final long serialVersionUID = 1L;"))
 
-;;;###autoload
-(defun default-code-style-hook()
-  (setq c-basic-offset 2
-        c-label-offset 0
-        tab-width 2
-        indent-tabs-mode nil
-        ;; compile-command "mvn -q -o -f ~/src/content-engine/engine/engine-core/pom.xml test -DtrimStackTrace=false"
-        require-final-newline nil))
-
-(add-hook 'java-mode-hook 'default-code-style-hook)
+;; ;;;###autoload
+;; (defun default-code-style-hook()
+;;   (setq c-basic-offset 2
+;;         c-label-offset 0
+;;         tab-width 4
+;;         indent-tabs-mode nil
+;;         ;; compile-command "mvn -q -o -f ~/src/content-engine/engine/engine-core/pom.xml test -DtrimStackTrace=false"
+;;         require-final-newline nil))
+;; (add-hook 'java-mode-hook 'default-code-style-hook)
 
 (use-package hydra)
 
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "s-l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (java-mode . lsp)
-         ;; if you want which-key integration
+  :hook ((java-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :config
@@ -29,7 +26,7 @@
         lsp-enable-file-watchers nil
         lsp-highlight-symbol-at-point nil)
   (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+  (setq read-process-output-max (* 1024 1024 10)) ;; 10mb
   (setq lsp-idle-delay 0.500)
   )
 
@@ -51,9 +48,17 @@
 ;; optional
 (use-package lsp-ui
   :commands lsp-ui-mode
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
   :config
   (setq lsp-prefer-flymake nil
-        lsp-ui-doc-delay 5.0
+        lsp-ui-sideline-enable nil
+        lsp-use-native-json t
+        lsp-ui-sideline-ignore-duplicate t
+        ;; lsp-ui-doc-use-webkit t
+        lsp-ui-doc-delay 3.0
         lsp-ui-sideline-enable nil
         lsp-ui-sideline-show-symbol nil))
 
@@ -65,11 +70,11 @@
 
 (use-package dap-mode
   :bind
-  (("<f7>" . dap-step-in)
-   ("<M-f7>" . dap-step-out)
-   ("<f5>" . dap-debug)
-   ("<f8>" . dap-next)
-   ("<f9>" . dap-continue))
+  ("<f5>" . dap-debug)
+  ("<f7>" . dap-step-in)
+  ("<M-f7>" . dap-step-out)
+  ("<f8>" . dap-next)
+  ("<f9>" . dap-continue)
   :hook
   ((java-mode . dap-mode)
    (java-mode . dap-ui-mode))
@@ -78,7 +83,7 @@
   (dap-register-debug-template
    "Java Run"
    (list :type "java"
-         :request "compile_attach"
+         :request "launch"
          :args ""
          :noDebug t
          :cwd nil
