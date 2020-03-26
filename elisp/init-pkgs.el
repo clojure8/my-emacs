@@ -204,9 +204,9 @@
 (use-package ivy-yasnippet
   :after yasnippet)
 
-(use-package ivy-explorer
-  :config
-  (ivy-explorer-mode t))
+;; (use-package ivy-explorer
+;;   :config
+;;   (ivy-explorer-mode t))
 
 (use-package iedit
   :bind

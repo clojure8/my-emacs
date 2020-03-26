@@ -38,7 +38,8 @@
     "pf" 'counsel-projectile-find-file
     "pp" 'counsel-projectile-switch-project
     "pa" 'projectile-add-known-project
-    "pt" '+treemacs/toggle
+    "pr" 'counsel-projectile-rg
+    "op" '+treemacs/toggle
     "jj" 'dumb-jump-go
     "jb" 'dumb-jump-back
     "sw" 'shell-pop
