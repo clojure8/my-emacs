@@ -132,4 +132,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-org)
 (require 'init-lsp-java)
 (require 'init-treemacs)
+(require 'init-git)
+
 (require 'init-evil)
