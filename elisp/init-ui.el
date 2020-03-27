@@ -1,6 +1,10 @@
-;;========================================================================================
+;;===================================================
 ;; UI
-;;========================================================================================
+;;===================================================
+;; 隐藏titlebar显示文件名
+(csetq ns-use-proxy-icon nil)
+;; (csetq frame-title-format nil)
+
 (setq visible-bell nil
       ring-bell-function 'flash-mode-line)
 (defun flash-mode-line ()
@@ -37,65 +41,65 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-hook 'after-load-theme-hook
             (lambda ()
-	          (let ((bg (frame-parameter nil 'background-mode)))
+              (let ((bg (frame-parameter nil 'background-mode)))
                 (set-frame-parameter nil 'ns-appearance bg)
                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
 
-;; (use-package eclipse-theme
-;;   :config
-;;   (load-theme 'eclipse t))
+;;==================================================
+;; theme
+;;==================================================
 
-(use-package spacemacs-theme
-  :defer t
-  :init
-  (load-theme 'spacemacs-dark t)
-  ;; (load-theme 'spacemacs-light t)
-  )
+(use-package eclipse-theme
+  :config
+  (load-theme 'eclipse t))
+
+;; (use-package doom-themes
+;;   :config
+;;   ;; Global settings (defaults)
+;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;;   (load-theme 'doom-one t)
+;;   ;; Enable flashing mode-line on errors
+;;   (doom-themes-visual-bell-config)
+;;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+;;   (doom-themes-neotree-config)
+;;   ;; or for treemacs users
+;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+;;   (doom-themes-treemacs-config)
+;;   ;; Corrects (and improves) org-mode's native fontification.
+;;   (doom-themes-org-config))
+
+;; (use-package spacemacs-theme
+;;   :defer t
+;;   :init
+;;   (load-theme 'spacemacs-dark t)
+;;   ;; (load-theme 'spacemacs-light t)
+;;   )
 
 ;; (use-package monokai-theme
 ;;   :defer t
 ;;   :init
 ;;   (load-theme 'monokai t))
 
-;;显示行号
-(global-linum-mode t)
+;;==================================================
+;; 显示行号
+;;==================================================
+(use-package display-line-numbers
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode))
 
-(use-package powerline-evil
-  :after (evil evil-collection)
+;;==================================================
+;; modeline
+;;==================================================
+
+(use-package spaceline
   :config
-  (setq powerline-display-buffer-size nil)
-  (setq powerline-display-mule-info nil)
-  (setq powerline-display-hud nil)
-  (when (display-graphic-p)
-    (powerline-default-theme)
-    (remove-hook 'focus-out-hook 'powerline-unset-selected-window)))
+  (require 'spaceline-config)
+  (spaceline-spacemacs-theme))
 
-;; (use-package telephone-line
-;;   :init
-;;   (setq telephone-line-primary-left-separator 'telephone-line-gradient
-;;         telephone-line-secondary-left-separator 'telephone-line-nil
-;;         telephone-line-primary-right-separator 'telephone-line-gradient
-;;         telephone-line-secondary-right-separator 'telephone-line-nil)
-;;   (setq ;;telephone-line-height 24
-;;    telephone-line-evil-use-short-tag t)
-;;   :config
-;;   (telephone-line-mode 1))
-
-;; (use-package    feebleline
-;;   :ensure       t
-;;   :config       (setq feebleline-msg-functions
-;;                       '((feebleline-line-number         :post "" :fmt "%5s")
-;;                         (feebleline-column-number       :pre ":" :fmt "%-2s")
-;;                         (feebleline-file-directory      :face feebleline-dir-face :post "")
-;;                         (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
-;;                         (feebleline-file-modified-star  :face font-lock-warning-face :post "")
-;;                         (feebleline-git-branch          :face feebleline-git-face :pre " : ")
-;;                         (feebleline-project-name        :align right)))
-;;   (feebleline-mode 1))
-
-;; (use-package mini-modeline
-;;   :config
-;;   (mini-modeline-mode 1))
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1))
 
 ;; (require 'awesome-tray)
 ;; (csetq awesome-tray-mode-line-active-color  "#3366ff")
@@ -103,7 +107,11 @@
 ;;        '("location" "parent-dir" "mode-name" "awesome-tab" ))
 ;; (awesome-tray-mode 1)
 
-;; (toggle-frame-maximized)
+
+;;==================================================
+;; others
+;;==================================================
+
 (use-package beacon
   :config
   (beacon-mode 1))
@@ -122,84 +130,24 @@
         '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir))
   )
 
-;;====================================================================================================
-;; awesome-tab 
-;;====================================================================================================
 (use-package hydra)
-(use-package awesome-tab
-  :ensure nil
-  :after hydra
-  :config
-  (require 'awesome-tab)
-  (setq awesome-tab-ace-quit-keys '(?\C-g))
-  (setq awesome-tab-height 120)
-  (setq awesome-tab-icon-height 0.8)
-  (defhydra awesome-fast-switch (:hint nil)
-    "
- ^^^^Fast Move             ^^^^Tab                    ^^Search            ^^Misc
--^^^^--------------------+-^^^^---------------------+-^^----------------+-^^---------------------------
-   ^_k_^   prev group    | _C-a_^^     select first | _b_ search buffer | _C-k_   kill buffer
- _h_   _l_  switch tab   | _C-e_^^     select last  | _g_ search group  | _C-S-k_ kill others in group
-   ^_j_^   next group    | _C-j_^^     ace jump     | ^^                | ^^
- ^^0 ~ 9^^ select window | _C-h_/_C-l_ move current | ^^                | ^^
--^^^^--------------------+-^^^^---------------------+-^^----------------+-^^---------------------------
-"
-    ("h" awesome-tab-backward-tab)
-    ("j" awesome-tab-forward-group)
-    ("k" awesome-tab-backward-group)
-    ("l" awesome-tab-forward-tab)
-    ("0" my-select-window)
-    ("1" my-select-window)
-    ("2" my-select-window)
-    ("3" my-select-window)
-    ("4" my-select-window)
-    ("5" my-select-window)
-    ("6" my-select-window)
-    ("7" my-select-window)
-    ("8" my-select-window)
-    ("9" my-select-window)
-    ("C-a" awesome-tab-select-beg-tab)
-    ("C-e" awesome-tab-select-end-tab)
-    ("C-j" awesome-tab-ace-jump)
-    ("C-h" awesome-tab-move-current-tab-to-left)
-    ("C-l" awesome-tab-move-current-tab-to-right)
-    ("b" ivy-switch-buffer)
-    ("g" awesome-tab-counsel-switch-group)
-    ("C-k" kill-current-buffer)
-    ("C-S-k" awesome-tab-kill-other-buffers-in-current-group)
-    ("q" nil "quit"))
-  
-  (defun awesome-tab-buffer-groups ()
-    "`awesome-tab-buffer-groups' control buffers' group rules.
-
-Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-All buffer name start with * will group to \"Emacs\".
-Other buffer group by `awesome-tab-get-group-name' with project name."
-    (list
-     (cond
-      ((or (string-equal "*" (substring (buffer-name) 0 1))
-           (memq major-mode '(magit-process-mode
-                              magit-status-mode
-                              magit-diff-mode
-                              magit-log-mode
-                              magit-file-mode
-                              magit-blob-mode
-                              magit-blame-mode
-                              )))
-       "Emacs")
-      ((derived-mode-p 'eshell-mode)
-       "EShell")
-      ((derived-mode-p 'emacs-lisp-mode)
-       "Elisp")
-      ((derived-mode-p 'dired-mode)
-       "Dired")
-      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
-       "OrgMode")
-      (t
-       (awesome-tab-get-group-name (current-buffer))))))
-  
-  (awesome-tab-mode t))
 
 
+;;==================================================
+;; another tabbar
+;;==================================================
+;; (use-package centaur-tabs
+;;   :demand
+;;   :custom-face
+;;   (centaur-tabs-selected ((t (:background "#ffffff" :weight bold :foreground "black"))))
+;;   (centaur-tabs-unselected ((t (:background "#e5e5e5" :foreground "#666666"))))
+;;   :init
+;;   (setq centaur-tabs-height 23)
+;;   (setq centaur-tabs-set-icons t)
+;;   (setq centaur-tabs-set-close-button nil)
+;;   (setq x-underline-at-descent-line t)
+;;   :config
+;;   ;; (centaur-tabs-headline-match)
+;;   (centaur-tabs-mode t))
 
 (provide 'init-ui)

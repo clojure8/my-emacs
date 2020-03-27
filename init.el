@@ -119,6 +119,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (generate-autoloads "~/.emacs.d/elisp" "~/.emacs.d/loaddefs.el")
 (load (expand-file-name "~/.emacs.d/loaddefs.el") t t)
 
+
+(defun use-proxy ()
+  (interactive)
+  (setq url-gateway-method 'socks)
+  (setq socks-server '("Default server" "127.0.0.1" 1080 5)))
+
 ;;=============================================
 ;; require config
 ;;=============================================

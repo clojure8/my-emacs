@@ -1,10 +1,15 @@
+(use-package ace-window)
+(use-package ace-link)
+(use-package multiple-cursors)
+
+(use-package avy)
+
 (use-package smart-hungry-delete
   :ensure t
   :bind (("<backspace>" . smart-hungry-delete-backward-char)
 		 ("C-d" . smart-hungry-delete-forward-char))
   :defer nil ;; dont defer so we can add our functions to hooks 
-  :config (smart-hungry-delete-add-default-hooks)
-  )
+  :config (smart-hungry-delete-add-default-hooks))
 
 ;;;###autoload
 (defun my-string-inflection-cycle-auto ()
@@ -275,5 +280,7 @@
               (< idx 0))
           (message "No further history.")
         (switch-to-buffer (nth idx moon-helpful-history))))))
+
+(use-package gitignore-templates)
 
 (provide 'init-pkgs)
