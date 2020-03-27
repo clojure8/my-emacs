@@ -3,11 +3,11 @@
 (csetq org-directory "~/orgs")
 (csetq org-table '((t (:foreground "#6c71c4" :family "Ubuntu Mono"))))
 (csetq org-default-notes-file (concat org-directory "/notes.org"))
-(csetq org-download-image-dir "~/Downloads")
+(csetq org-download-image-dir "~/org/downloads")
 (csetq org-agenda-files
-       (list "~/Dropbox/orgfiles/gcal.org"
-             "~/Dropbox/orgfiles/i.org"
-             "~/Dropbox/orgfiles/schedule.org"))
+       (list "~/org/agenda/gcal.org"
+             "~/org/agenda/i.org"
+             "~/org/agenda/schedule.org"))
 
 (use-package org-download)
 
@@ -18,19 +18,19 @@
 (use-package noflet)
 
 (setq org-capture-templates
-      '(("a" "Appointment" entry (file  "~/Dropbox/orgfiles/gcal.org" "Appointments")
+      '(("a" "Appointment" entry (file  "~/org/agenda/gcal.org" "Appointments")
          "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-        ("n" "Note" entry (file+headline "~/Dropbox/orgfiles/notes.org" "Notes")
+        ("n" "Note" entry (file+headline "~/org/agenda/notes.org" "Notes")
          "* Note %?\n%T")
-        ("l" "Link" entry (file+headline "~/Dropbox/orgfiles/links.org" "Links")
+        ("l" "Link" entry (file+headline "~/org/agenda/links.org" "Links")
          "* %? %^L %^g \n%T" :prepend t)
-        ("b" "Blog idea" entry (file+headline "~/Dropbox/orgfiles/i.org" "Blog Topics:")
+        ("b" "Blog idea" entry (file+headline "~/org/agenda/i.org" "Blog Topics:")
          "* %?\n%T" :prepend t)
-        ("t" "To Do Item" entry (file+headline "~/Dropbox/orgfiles/i.org" "To Do Items")
+        ("t" "To Do Item" entry (file+headline "~/org/agenda/i.org" "To Do Items")
          "* %?\n%T" :prepend t)
         ("j" "Journal" entry (file+datetree "~/Dropbox/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
-        ("s" "Screencast" entry (file "~/Dropbox/orgfiles/screencastnotes.org")
+        ("s" "Screencast" entry (file "~/org/agenda/screencastnotes.org")
          "* %?\n%i\n")))
 
 (defadvice org-capture-finalize
