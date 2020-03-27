@@ -169,7 +169,10 @@
 
 (use-package projectile
   :init
-  (csetq projectile-project-search-path '("~/Workspace/")))
+  (setq projectile-indexing-method 'hybrid)
+  (setq projectile-enable-caching t)
+  ;; Projectile to be usable in every directory 
+  (setq projectile-require-project-root nil)) 
 
 (use-package counsel-projectile)
 (use-package evil-magit :after (evil magit))
@@ -237,14 +240,14 @@
                           (select-window window)
                         ;; line above returns nil if no available window is found
                         (pop-to-buffer buf))))
-  (defvar moon-helpful-history () "History of helpful, a list of buffers.")
-  (advice-add #'helpful-update :around #'moon-helpful@helpful-update)
+  (defvar my-helpful-history () "History of helpful, a list of buffers.")
+  (advice-add #'helpful-update :around #'my-helpful/helpful-update)
   (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
                                           (let ((buf (apply oldfunc _)))
-                                            (push buf moon-helpful-history)
+                                            (push buf my-helpful-history)
                                             buf))))
-
-(defun moon-helpful@helpful-update (oldfunc)
+;;;###autoload
+(defun my-helpful/helpful-update (oldfunc)
   "Insert back/forward buttons."
   (funcall oldfunc)
   (let ((inhibit-read-only t))
@@ -252,20 +255,21 @@
     (insert-text-button "Back"
                         'action (lambda (&rest _)
                                   (interactive)
-                                  (moon-helpful-switch-to-buffer (current-buffer) 1)))
+                                  (my-helpful/switch-to-buffer (current-buffer) 1)))
     (insert " / ")
     (insert-text-button "Forward"
                         'action (lambda (&rest _)
                                   (interactive)
-                                  (moon-helpful-switch-to-buffer (current-buffer)  -1)))
+                                  (my-helpful/switch-to-buffer (current-buffer)  -1)))
     (insert "\n\n")))
 
-(defun moon-helpful-switch-to-buffer (buffer &optional offset)
+;;;###autoload
+(defun my-helpful/switch-to-buffer (buffer &optional offset)
   "Jump to last SYMBOL in helpful history, offset by OFFSET."
   (interactive)
   (require 'seq)
   (require 'cl-lib)
-  (setq moon-helpful-history (seq-remove (lambda (buf) (not (buffer-live-p buf))) moon-helpful-history))
+  (setq my-helpful-history (seq-remove (lambda (buf) (not (buffer-live-p buf))) my-helpful-history))
   (cl-labels ((find-index (elt lst)
                           (let ((idx 0)
                                 (len (length lst)))
@@ -275,11 +279,11 @@
                             (if (eq idx len)
                                 nil
                               idx))))
-    (let ((idx (+ (or offset 0) (find-index buffer moon-helpful-history))))
-      (if (or (>= idx (length moon-helpful-history))
+    (let ((idx (+ (or offset 0) (find-index buffer my-helpful-history))))
+      (if (or (>= idx (length my-helpful-history))
               (< idx 0))
           (message "No further history.")
-        (switch-to-buffer (nth idx moon-helpful-history))))))
+        (switch-to-buffer (nth idx my-helpful-history))))))
 
 (use-package gitignore-templates)
 

@@ -1,3 +1,0 @@
-[submodule "elisp/emacs-format-all-the-code"]
-	path = elisp/emacs-format-all-the-code
-	url = https://github.com/lassik/emacs-format-all-the-code

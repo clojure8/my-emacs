@@ -43,8 +43,9 @@ This must be set before `treemacs' has loaded.")
 
 
 (use-package treemacs-projectile
+  :hook
+  (dired-mode . treemacs-icons-dired-mode)
   :after treemacs)
-
 
 (use-package treemacs-magit
   :after treemacs magit)
