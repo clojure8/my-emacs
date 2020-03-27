@@ -21,7 +21,7 @@
 ;; -CheckVer
 
 ;; BetterGC
-(defvar better-gc-cons-threshold (* 256 1024 1024)
+(defvar better-gc-cons-threshold (* 1024 1024 1024) ;;1G
   "The default value to use for `gc-cons-threshold'.
 If you experience freezing, decrease this.  If you experience stuttering, increase this.")
 
@@ -68,14 +68,32 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (package-install 'use-package))
 
 (setq use-package-always-ensure t)
+
+
+;;==================================================
+;; straight初始化
+;;==================================================
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (load bootstrap-file nil 'nomessage))
+
+;;==================================================
+;; 引入一些基础包
+;;==================================================
 (use-package s)
 (use-package f)
 (use-package dash)
 (use-package language-id)
+(use-package el-patch)
 
 ;;================================================================================
 ;;; LoadPath
 ;;================================================================================
+(defconst my-elisp-dir "~/.emacs.d/elisp")
+(defconst my-autoload-file "~/.emacs.d/loaddefs.el")
+
 (require 'cl-lib)
 (require 'autoload)
 (with-eval-after-load 'gnutls
@@ -115,10 +133,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
                      path)
                  :fixed-case :literal nil 1))))
 
-(refresh-load-path "~/.emacs.d/elisp")
-(generate-autoloads "~/.emacs.d/elisp" "~/.emacs.d/loaddefs.el")
-(load (expand-file-name "~/.emacs.d/loaddefs.el") t t)
+(generate-autoloads my-elisp-dir my-autoload-file)
+(load (expand-file-name my-autoload-file) t t)
 
+;;==================================================
+;; 在mac中使用代理
+;;==================================================
+(defun gen-autoloads ()
+  (interactive)
+  (generate-autoloads my-elisp-dir my-autoload-file))
 
 (defun use-proxy ()
   (interactive)
@@ -126,11 +149,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq socks-server '("Default server" "127.0.0.1" 1080 5)))
 
 ;;=============================================
-;; require config
+;; 自定义的一些配置导入
 ;;=============================================
-(require 'straight)
-(use-package el-patch)
-
 (require 'init-base)
 (require 'init-funcs)
 (require 'init-ui)
@@ -139,5 +159,4 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-lsp-java)
 (require 'init-treemacs)
 (require 'init-git)
-
 (require 'init-evil)

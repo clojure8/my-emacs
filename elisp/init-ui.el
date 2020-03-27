@@ -5,13 +5,18 @@
 (csetq ns-use-proxy-icon nil)
 ;; (csetq frame-title-format nil)
 
-(setq visible-bell nil
-      ring-bell-function 'flash-mode-line)
+;;==================================================
+;; 关闭告警图标
+;;==================================================
 (defun flash-mode-line ()
   (invert-face 'mode-line)
   (run-with-timer 0.1 nil #'invert-face 'mode-line))
+(setq visible-bell nil
+      ring-bell-function 'flash-mode-line)
 
-;;中英文字体设置
+;;==================================================
+;; 中文字体设置
+;;==================================================
 (defun set-font (english chinese english-size chinese-size)
   (set-face-attribute 'default nil :font
                       (format   "%s:pixelsize=%d"  english english-size))
@@ -23,6 +28,9 @@
 ;; (set-font "monospace" "STkaiti" 13 13)
 (set-font "Hack" "STkaiti" 12 14)
 
+;;==================================================
+;; 零散的一些设置
+;;==================================================
 (csetq tab-width 4)
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
@@ -31,11 +39,13 @@
 (setq inhibit-splash-screen t)
 ;;(setq-default mode-line-format nil)
 (global-hl-line-mode t)
-
 ;;改鼠标为光标
 (setq-default cursor-type 'bar)
 (add-hook 'prog-hook 'prettify-symbols-mode)
 
+;;==================================================
+;; mac titilebar透明设置
+;;==================================================
 (when (memq window-system '(mac ns))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; {light, dark}
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))

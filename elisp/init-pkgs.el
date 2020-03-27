@@ -61,8 +61,8 @@
 (use-package better-defaults)
 
 (use-package editorconfig
-  :config
-  (editorconfig-mode 1))
+  :hook
+  (prog-mode . editorconfig-mode))
 
 (use-package posframe)
 

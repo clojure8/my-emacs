@@ -1,29 +1,4 @@
 ;; init-base.el --- Better default configurations.	-*- lexical-binding: t -*-
-
-;; Copyright (C) 2019 Vincent Zhang
-
-;; Author: Vincent Zhang <seagle0128@gmail.com>
-;; URL: https://github.com/seagle0128/.emacs.d
-
-;; This file is not part of GNU Emacs.
-;;
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2, or
-;; (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;; General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with this program; see the file COPYING.  If not, write to
-;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
-;; Floor, Boston, MA 02110-1301, USA.
-;;
-
-;;; Commentary:
 ;;
 ;; Better defaults.
 ;;
@@ -42,8 +17,8 @@
     (car (car (cdr x)))))
 
 ;; Personal information
-(setq user-full-name centaur-full-name)
-(setq user-mail-address centaur-mail-address)
+(setq user-full-name "Peeta Wu")
+(setq user-mail-address "clojure8@gmail.com")
 
 ;; Key Modifiers
 (with-no-warnings
@@ -151,17 +126,13 @@
 ;; WORKAROUND: To address blank screen issue with child-frame in fullscreen
 (when (and sys/mac-x-p emacs/>=26p)
   (setq ns-use-native-fullscreen nil))
-(bind-keys ("C-<f11>" . toggle-frame-fullscreen)
-           ("C-s-f" . toggle-frame-fullscreen) ; Compatible with macOS
-           ("S-s-<return>" . toggle-frame-fullscreen)
-           ("M-S-<return>" . toggle-frame-fullscreen))
-
+(bind-keys 
+ ("M-s-<return>" . toggle-frame-maximized))
 
 ;; Move Custom-Set-Variables to Different File
 (setq custom-file (concat user-emacs-directory "custom-set-variables.el"))
 (load custom-file 'noerror)
 
 (provide 'init-base)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-base.el ends here
