@@ -73,11 +73,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 ;;==================================================
 ;; straight初始化
 ;;==================================================
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (load bootstrap-file nil 'nomessage))
+;; (defvar bootstrap-version)
+;; (let ((bootstrap-file
+;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 5))
+;;   (load bootstrap-file nil 'nomessage))
 
 ;;==================================================
 ;; 引入一些基础包
@@ -159,4 +159,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-lsp-java)
 (require 'init-treemacs)
 (require 'init-git)
+(require 'init-ivy)
+(require 'init-helm)
 (require 'init-evil)

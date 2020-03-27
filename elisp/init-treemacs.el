@@ -1,54 +1,71 @@
+;; init-treemacs.el --- Initialize treemacs.	-*- lexical-binding: t -*-
 
-(defvar +treemacs-git-mode 'simple
-  "Type of git integration for `treemacs-git-mode'.
+;;
+;; Treemacs: A tree layout file explorer.
+;;
 
-There are 3 possible values:
-
-  1) `simple', which highlights only files based on their git status, and is
-     slightly faster,
-  2) `extended', which highlights both files and directories, but requires
-     python,
-  3) `deferred', same as extended, but highlights asynchronously.
-
-This must be set before `treemacs' has loaded.")
+;;; Code:
 
 
+(defvar +treemacs-git-mode 'simple)
+
+;; A tree layout file explorer
 (use-package treemacs
-  :defer t
-  :init
-  (setq treemacs-follow-after-init t
-        treemacs-is-never-other-window t
-        treemacs-sorting 'alphabetic-case-insensitive-asc
-        treemacs-persist-file (concat *my/emacs-cache* "treemacs-persist")
-        treemacs-last-error-persist-file (concat *my/emacs-cache* "treemacs-last-error-persist"))
+  :commands (treemacs-follow-mode
+             treemacs-filewatch-mode
+             treemacs-fringe-indicator-mode
+             treemacs-git-mode)
+  :bind (([f8]        . treemacs)
+         ("M-0"       . treemacs-select-window)
+         ("C-x 1"     . treemacs-delete-other-windows)
+         ("C-x t 1"   . treemacs-delete-other-windows)
+         ("C-x t t"   . treemacs)
+         ("C-x t b"   . treemacs-bookmark)
+         ("C-x t C-t" . treemacs-find-file)
+         ("C-x t M-t" . treemacs-find-tag)
+         :map treemacs-mode-map
+         ([mouse-1]   . treemacs-single-click-expand-action))
   :config
-  (treemacs-resize-icons 13)
-  ;; Don't follow the cursor
-  (treemacs-follow-mode -1)
+  (setq treemacs-collapse-dirs           (if treemacs-python-executable 3 0)
+        treemacs-sorting                 'alphabetic-asc
+        treemacs-follow-after-init       t
+        treemacs-is-never-other-window   t
+        treemacs-silent-filewatch        t
+        treemacs-silent-refresh          t
+        treemacs-width                   30
+        treemacs-no-png-images           t)
+  :config
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null (executable-find "python3"))))
+    (`(t . t)
+     (treemacs-git-mode 'deferred))
+    (`(t . _)
+     (treemacs-git-mode 'simple)))
 
-  (when +treemacs-git-mode
-    ;; If they aren't supported, fall back to simpler methods
-    (when (and (memq +treemacs-git-mode '(deferred extended))
-               (not (executable-find "python3")))
-      (setq +treemacs-git-mode 'simple))
-    (treemacs-git-mode +treemacs-git-mode)
-    (setq treemacs-collapse-dirs
-          (if (memq treemacs-git-mode '(extended deferred))
-              3
-            0))))
+  ;; Projectile integration
+  (use-package treemacs-projectile
+    :after projectile
+    :bind (:map projectile-command-map
+                ("h" . treemacs-projectile)))
 
+  (use-package treemacs-magit
+    :after magit
+    :commands treemacs-magit--schedule-update
+    :hook ((magit-post-commit
+            git-commit-post-finish
+            magit-post-stage
+            magit-post-unstage)
+           . treemacs-magit--schedule-update))
 
-(use-package treemacs-evil
-  :after treemacs)
+  (use-package perspective)
+  (use-package treemacs-persp
+    :after persp-mode
+    :commands treemacs-set-scope-type
+    :init (treemacs-set-scope-type 'Frames)))
 
-
-(use-package treemacs-projectile
-  :hook
-  (dired-mode . treemacs-icons-dired-mode)
-  :after treemacs)
-
-(use-package treemacs-magit
-  :after treemacs magit)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defun +treemacs--init ()

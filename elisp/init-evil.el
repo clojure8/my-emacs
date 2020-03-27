@@ -39,13 +39,13 @@
     "pp" 'counsel-projectile-switch-project
     "pa" 'projectile-add-known-project
     "pr" 'counsel-projectile-rg
-    "op" '+treemacs/toggle
+    "op" 'treemacs
     "jj" 'dumb-jump-go
     "jb" 'dumb-jump-back
-    "sw" 'shell-pop
     "cr" 'counsel-rg
     )
   (global-set-key (kbd "s-/") 'comment-line)
+  (global-set-key (kbd "C-S-p") 'counsel-switch-buffer)
   (global-set-key (kbd "s-;") 'yas-expand)
   (global-set-key (kbd "C-c C-c") 'er/expand-region))
 

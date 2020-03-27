@@ -5,11 +5,12 @@
 (use-package avy)
 
 (use-package smart-hungry-delete
-  :ensure t
-  :bind (("<backspace>" . smart-hungry-delete-backward-char)
-		 ("C-d" . smart-hungry-delete-forward-char))
+  ;; 绑定backspace会导致counsel-find-file下产生readonly bug!!!
+  ;; :bind (("<backspace>" . smart-hungry-delete-backward-char)
+  ;;   	 ("C-d" . smart-hungry-delete-forward-char))
   :defer nil ;; dont defer so we can add our functions to hooks 
   :config (smart-hungry-delete-add-default-hooks))
+
 
 ;;;###autoload
 (defun my-string-inflection-cycle-auto ()
@@ -35,29 +36,15 @@
   :config
   (drag-stuff-define-keys))
 
-
+;;==================================================
+;; 变量命名变形
+;;==================================================
 (use-package string-inflection
   :config
   ;; C-q C-u is the key bindings similar to Vz Editor.
   (global-unset-key (kbd "C-q"))
   (global-set-key (kbd "C-q C-u") 'my-string-inflection-cycle-auto))
 
-(use-package ivy)
-
-(use-package projectile)
-
-(use-package ivy-xref
-  :init
-  ;; xref initialization is different in Emacs 27 - there are two different
-  ;; variables which can be set rather than just one
-  (when (>= emacs-major-version 27)
-    (setq xref-show-definitions-function #'ivy-xref-show-defs))
-  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
-  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
-  ;; as well
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
-
-(use-package helm)
 (use-package better-defaults)
 
 (use-package editorconfig
@@ -65,60 +52,12 @@
   (prog-mode . editorconfig-mode))
 
 (use-package posframe)
-
-(use-package shell-pop
-  :init
-  (csetq shell-pop-default-directory "/Users/peterwu/.emacs.d")
-  (csetq shell-pop-shell-type (quote ("multi-term" "*multi-term*" (lambda nil (multi-term)))))
-  (csetq shell-pop-term-shell "/usr/local/bin/zsh")
-  (csetq shell-pop-window-size 30)
-  (csetq shell-pop-full-span t)
-  (csetq shell-pop-window-position "bottom")
-  (csetq shell-pop-autocd-to-working-dir t)
-  (csetq shell-pop-restore-window-configuration t)
-  (csetq shell-pop-cleanup-buffer-at-process-exit t)
-  :hook (shell-pop-in-after . (lambda () (linum-mode -1))))
-
 (use-package emojify)
 
 (use-package dumb-jump
   :config
   (setq dumb-jump-default-project "~/Workspace")
   (setq dumb-jump-selector 'ivy))
-
-(use-package company
-  :config
-  (global-company-mode t))
-
-(use-package swiper
-  :init
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (global-set-key "\C-s" 'swiper)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "<f6>") 'ivy-resume))
-
-(use-package counsel
-  :bind
-  (("C-c f" . counsel-recentf))
-  :init
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
-  :config
-  (setq counsel-describe-function-function #'helpful-callable
-        counsel-describe-variable-function #'helpful-variable)
-  )
 
 (use-package youdao-dictionary
   :ensure t
@@ -179,52 +118,32 @@
 (use-package anzu)
 (use-package expand-region)
 
-(use-package fuz)
-
-;; (use-package ivy-fuz
-;;   :ensure t
-;;   :demand t
-;;   :after ivy
-;;   :custom
-;;   (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
-;;   (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
-;;   :config
-;;   (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
-
 (use-package which-key
   :config
   (which-key-mode t))
 
-(use-package better-shell
-  :bind (("C-'" . better-shell-shell)))
-
 (use-package eyebrowse)
 (use-package multi-term)
 
+;;==================================================
+;; yasnippet
+;;==================================================
 (use-package yasnippet
   :hook
   ((prog-mode . yas-minor-mode))
   :config
   (yas-reload-all))
+(use-package ivy-yasnippet
+  :after (ivy yasnippet))
 
 (use-package yasnippet-snippets)
 
-(use-package ivy-yasnippet
-  :after yasnippet)
-
-;; (use-package ivy-explorer
-;;   :config
-;;   (ivy-explorer-mode t))
 
 (use-package iedit
   :bind
   ("s-d" . iedit-mode))
 
 (use-package popwin)
-
-(use-package ivy-rich
-  :config
-  (ivy-rich-mode 1))
 
 (use-package helpful
   :commands (helpful-callable
@@ -286,5 +205,6 @@
         (switch-to-buffer (nth idx my-helpful-history))))))
 
 (use-package gitignore-templates)
+
 
 (provide 'init-pkgs)
