@@ -81,6 +81,9 @@
 (define-key org-mode-map (kbd "M-h") nil)
 (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)
 
+;;==================================================
+;; org-babel设置
+;;==================================================
 (defun bh/display-inline-images ()
   (condition-case nil
       (org-display-inline-images)
@@ -101,5 +104,18 @@
    (emacs-lisp . t)
    (plantuml . t)
    (python . t)))
+
+;;==================================================
+;; 幻灯片设置
+;; https://github.com/yjwen/org-reveal
+;;==================================================
+(use-package ox-reveal
+  :ensure ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+(setq org-reveal-mathjax t)
+;;(setq org-reveal-hlevel 2)
+(use-package htmlize
+  :ensure t)
+
 
 (provide 'init-org)

@@ -139,10 +139,16 @@
   (yas-reload-all))
 (use-package ivy-yasnippet
   :after (ivy yasnippet))
-
 (use-package yasnippet-snippets)
 
+(use-package auto-yasnippet
+  :bind
+  ("M-o" . aya-open-line))
 
+
+;;==================================================
+;; 其他提高编辑速度的东西
+;;==================================================
 (use-package iedit
   :bind
   ("s-d" . iedit-mode))
@@ -211,5 +217,14 @@
 (use-package gitignore-templates)
 
 (use-package lua-mode)
+
+;;==================================================
+;; 连接浏览器的textarea
+;;==================================================
+(use-package atomic-chrome
+  :config
+  ;;这玩意太影响启动速度了，用的时候再开启
+  ;; (atomic-chrome-start-server)
+  )
 
 (provide 'init-pkgs)
