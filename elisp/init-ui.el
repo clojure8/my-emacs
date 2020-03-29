@@ -44,6 +44,13 @@
 (add-hook 'prog-hook 'prettify-symbols-mode)
 
 ;;==================================================
+;; 显示行号
+;;==================================================
+(use-package display-line-numbers
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode))
+
+;;==================================================
 ;; mac titilebar透明设置
 ;;==================================================
 (when (memq window-system '(mac ns))
@@ -79,7 +86,7 @@
 ;;   ;; Corrects (and improves) org-mode's native fontification.
 ;;   (doom-themes-org-config))
 
-;; (use-package spacemacs-theme
+;; ;; (use-package spacemacs-theme
 ;;   :defer t
 ;;   :init
 ;;   (load-theme 'spacemacs-dark t)
@@ -91,12 +98,6 @@
 ;;   :init
 ;;   (load-theme 'monokai t))
 
-;;==================================================
-;; 显示行号
-;;==================================================
-(use-package display-line-numbers
-  :ensure nil
-  :hook (prog-mode . display-line-numbers-mode))
 
 ;;==================================================
 ;; modeline
@@ -107,9 +108,11 @@
   (require 'spaceline-config)
   (spaceline-spacemacs-theme))
 
-;; (use-package doom-modeline
-;;   :ensure t
-;;   :init (doom-modeline-mode 1))
+;;(use-package doom-modeline
+;;  :config
+;;  (setq doom-modeline-height 10)
+;;  (setq doom-modeline--font-height 10)
+;;  (doom-modeline-mode 1))
 
 ;; (require 'awesome-tray)
 ;; (csetq awesome-tray-mode-line-active-color  "#3366ff")
@@ -141,7 +144,6 @@
   )
 
 (use-package hydra)
-
 
 ;;==================================================
 ;; another tabbar

@@ -47,6 +47,7 @@
   (global-set-key (kbd "s-/") 'comment-line)
   (global-set-key (kbd "C-S-p") 'counsel-switch-buffer)
   (global-set-key (kbd "s-;") 'yas-expand)
+  (global-set-key (kbd "C-x k") 'kill-current-buffer)
   (global-set-key (kbd "C-c C-c") 'er/expand-region))
 
 (provide 'init-evil)

@@ -1,6 +1,10 @@
+
+(use-package figlet)
 (use-package ace-window)
 (use-package ace-link)
 (use-package multiple-cursors)
+
+
 
 (use-package avy)
 
@@ -206,5 +210,6 @@
 
 (use-package gitignore-templates)
 
+(use-package lua-mode)
 
 (provide 'init-pkgs)

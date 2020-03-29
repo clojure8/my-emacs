@@ -58,7 +58,7 @@
         lsp-use-native-json t
         lsp-ui-sideline-ignore-duplicate t
         ;; lsp-ui-doc-use-webkit t
-        lsp-ui-doc-delay 3.0
+        lsp-ui-doc-delay 5.0
         lsp-ui-sideline-enable nil
         lsp-ui-sideline-show-symbol nil))
 

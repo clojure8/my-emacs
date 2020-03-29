@@ -57,12 +57,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 ;; Package
 ;;========================================================================================
 (setq package-archives '(
-                         ;;("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ;;("melpa" . "http://elpa.emacs-china.org/melpa/")
-                         ("melpa" . "https://mirrors.163.com/elpa/melpa/")
-                         ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
+                         ("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+                         ;; ("melpa" . "https://mirrors.163.com/elpa/melpa/")
+                         ;; ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
-(package-initialize)
+                         (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -157,6 +157,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-pkgs)
 (require 'init-org)
 (require 'init-lsp-java)
+;;(require 'init-nox-java)
 (require 'init-treemacs)
 (require 'init-git)
 (require 'init-ivy)
