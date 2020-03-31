@@ -162,4 +162,5 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-git)
 (require 'init-ivy)
 (require 'init-helm)
+(require 'init-eshell)
 (require 'init-evil)

@@ -3,11 +3,20 @@
 (csetq org-directory "~/orgs")
 (csetq org-table '((t (:foreground "#6c71c4" :family "Ubuntu Mono"))))
 (csetq org-default-notes-file (concat org-directory "/notes.org"))
-(csetq org-download-image-dir "~/orgs/downloads")
 (csetq org-agenda-files
        (list "~/orgs/agenda/gcal.org"
              "~/orgs/agenda/i.org"
              "~/orgs/agenda/schedule.org"))
+;; Syntax highlight in #+BEGIN_SRC blocks
+(setq org-src-fontify-natively t)
+;; Don't prompt before running code in org
+(setq org-confirm-babel-evaluate nil)
+;; Fix an incompatibility between the ob-async and ob-ipython packages
+;; (setq ob-async-no-async-languages-alist '("ipython"))
+
+(use-package ob-ipython)
+(use-package async)
+(use-package ob-restclient)
 
 (use-package org-roam
   :hook 
@@ -31,11 +40,22 @@
   ;; (setq org-roam-graph-viewer "/usr/local/bin/image-viewer")
   )
 
-(use-package org-download)
+(use-package org-download
+  :init
+  (csetq org-download-image-dir "~/orgs/downloads")
+  (csetq org-download-heading-lvl nil)
+  (csetq org-download-backend "curl \"%s\" -o \"%s\"")
+  :config
+  (org-download-enable)
+  (setq org-download-display-inline-images t))
 
 (use-package org-bullets
   :hook ((org-mode . org-bullets-mode)
-         (org-mode . org-indent-mode)))
+         (org-mode . org-indent-mode))
+  :config
+  ;; 设置 bullet list
+  ;; (setq org-bullets-bullet-list '("☰" "☷" "☯" "☭"))
+  )
 
 (use-package noflet)
 
@@ -102,8 +122,7 @@
    (ditaa . t)
    (dot . t);;Graphviz
    (emacs-lisp . t)
-   (plantuml . t)
-   (python . t)))
+   (plantuml . t)))
 
 ;;==================================================
 ;; 幻灯片设置
@@ -116,6 +135,14 @@
 ;;(setq org-reveal-hlevel 2)
 (use-package htmlize
   :ensure t)
+
+;;==================================================
+;; toc
+;;==================================================
+(use-package toc-org
+  :hook
+  ((org-mode . toc-org-mode)
+   (markdown-mode . toc-org-mode)))
 
 
 (provide 'init-org)
