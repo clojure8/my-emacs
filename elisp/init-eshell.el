@@ -43,8 +43,6 @@
   :bind
   ("s-`" . eshell-toggle))
 
-(defalias 'eshell/ll (lambda () (eshell/ls "-l")))
-
 (add-hook 'eshell-mode-hook (lambda ()
                               (eshell/alias "e" "find-file $1")
                               (eshell/alias "ff" "find-file $1")

@@ -144,5 +144,16 @@
   ((org-mode . toc-org-mode)
    (markdown-mode . toc-org-mode)))
 
+;;==================================================
+;; 隐藏 begin_src, end_src显示
+;;==================================================
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (save-excursion
+;;               (goto-char (point-max))
+;;               (while (re-search-backward "#\\+BEGIN_SRC\\|#\\+END_SRC" nil t)
+;;                 (let ((ov (make-overlay (line-beginning-position) (1+ (line-end-position)))))
+;;                   (overlay-put ov 'invisible t))))))
+
 
 (provide 'init-org)

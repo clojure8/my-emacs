@@ -134,17 +134,19 @@
 ;;==================================================
 (use-package yasnippet
   :hook
-  ((prog-mode . yas-minor-mode))
+  ((prog-mode . yas-minor-mode)
+   (org-mode . yas-minor-mode))
   :config
   (yas-reload-all))
+  
 (use-package ivy-yasnippet
+  :bind
+  ("C-c s" . #'ivy-yasnippet)
   :after (ivy yasnippet))
 (use-package yasnippet-snippets)
-
 (use-package auto-yasnippet
   :bind
   ("M-o" . aya-open-line))
-
 
 ;;==================================================
 ;; 其他提高编辑速度的东西

@@ -62,7 +62,7 @@
         lsp-ui-sideline-enable nil
         lsp-ui-sideline-show-symbol nil))
 
-(use-package company-lsp :commands company-lsp)
+;;(use-package company-lsp :commands company-lsp)
 
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
@@ -100,6 +100,52 @@
   (require 'lsp-ui-flycheck)
   (lsp-ui-flycheck-enable nil)
   (flycheck-mode))
+
+;;==================================================
+;; java自定义的一些东西
+;;==================================================
+(require 's)
+(require 'f)
+(defun my/find-java-project-root (&optional dir)
+  (when (and (buffer-file-name)
+             (not (and dir (f-same? "~" dir))))
+    (let ((dir (or dir (f-dirname (buffer-file-name)))))
+      (if (or (f-exists? (f-expand ".git" dir))
+              (f-exists? (f-expand "pom.xml" dir))
+              (f-exists? (f-expand "build.gradle" dir)))
+          dir
+        (my/find-java-project-root (f-parent dir))))))
+
+(defun my/new-java-class (class-name)
+  (interactive "sEnter a class name: ")
+  (let* ((class-full-path-list (s-split "\\." class-name))
+         (current-dir (f-dirname (buffer-file-name)))
+         (save-to-current-dir? (= 1 (length class-full-path-list)))
+         (project-root (or (my/find-java-project-root) current-dir))
+         (src-default-dir "src/main/java")
+         (src-dir (f-join project-root (if save-to-current-dir?  current-dir src-default-dir)))
+         (package-dir (s-join "/" (butlast class-full-path-list)))  
+         (java-class-name (s-capitalized-words (car (last class-full-path-list))))
+         (java-package-name (if save-to-current-dir?
+                                (s-join "." (f-split (f-relative current-dir (f-join project-root src-default-dir))))
+                              (s-join "." (butlast class-full-path-list))))
+         (java-class-file-content (concat "package " java-package-name ";\n\n\n"))
+         (java-class-file-path (f-join src-dir package-dir (concat java-class-name ".java"))))
+    (make-directory (f-join src-dir package-dir) t)
+    (f-write-text java-class-file-content 'utf-8 java-class-file-path)
+    ;; 打开java类文件的时候进行yas-expand操作
+    (let ((ff-hook-fn-symbol (intern (concat "ff--" class-name "-fn"))))
+      (defalias ff-hook-fn-symbol
+        (lambda ()
+          (interactive)
+          (when (f-same? java-class-file-path (buffer-file-name))
+            (beginning-of-line 5)
+            (insert "cls1")
+            (yas-expand))))
+      (add-hook 'find-file-hook ff-hook-fn-symbol)
+      (find-file java-class-file-path)
+      (remove-hook 'find-file-hook ff-hook-fn-symbol)
+      (fmakunbound ff-hook-fn-symbol))))
 
 
 (provide 'init-lsp-java)
