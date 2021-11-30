@@ -1,10 +1,10 @@
 
-(defgroup wpt-proxy nil
+(defgroup my-proxy nil
   "my proxy"
-  :group 'wpt-proxy)
+  :group 'my-proxy)
 
-(setq wpt-proxy "127.0.0.1:1087")          ; HTTP/HTTPS proxy
-(setq wpt-socks-proxy "127.0.0.1:1086")    ; SOCKS proxy
+(setq my-proxy "127.0.0.1:1087")          ; HTTP/HTTPS proxy
+(setq my-socks-proxy "127.0.0.1:1086")    ; SOCKS proxy
 
 
 ;; Network Proxy
@@ -12,15 +12,15 @@
   "Show HTTP/HTTPS proxy."
   (interactive)
   (if url-proxy-services
-      (message "Current HTTP proxy is `%s'" wpt-proxy)
+      (message "Current HTTP proxy is `%s'" my-proxy)
     (message "No HTTP proxy")))
 
 (defun proxy-http-enable ()
   "Enable HTTP/HTTPS proxy."
   (interactive)
   (setq url-proxy-services
-        `(("http" . ,wpt-proxy)
-          ("https" . ,wpt-proxy)
+        `(("http" . ,my-proxy)
+          ("https" . ,my-proxy)
           ("no_proxy" . "^\\(localhost\\|192.168.*\\|10.*\\)")))
   (proxy-http-show))
 
@@ -52,11 +52,11 @@
   (require 'socks)
   (setq url-gateway-method 'socks
         socks-noproxy '("localhost"))
-  (let* ((proxy (split-string wpt-socks-proxy ":"))
+  (let* ((proxy (split-string my-socks-proxy ":"))
          (host (car proxy))
          (port (cadr  proxy)))
     (setq socks-server `("Default server" ,host ,port 5)))
-  (setenv "all_proxy" (concat "socks5://" wpt-socks-proxy))
+  (setenv "all_proxy" (concat "socks5://" my-socks-proxy))
   (proxy-socks-show))
 
 (defun proxy-socks-disable ()
@@ -76,12 +76,12 @@
     (proxy-socks-enable)))
 
 ;;;###autoload
-(define-minor-mode wpt-proxy-mode
+(define-minor-mode my-proxy-mode
   "Enable modeline in minibuffer."
   :init-value nil
   :global t
-  :group 'wpt-proxy
-  :lighter " wpt-proxy"
+  :group 'my-proxy
+  :lighter " my-proxy"
   (proxy-socks-toggle))
 
-(provide 'wpt-proxy)
+(provide 'my-proxy)

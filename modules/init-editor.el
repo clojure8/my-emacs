@@ -1,8 +1,10 @@
 ;;; code:
 
-(use-package ivy)
-(use-package counsel)
+(use-package ivy
+  :defer t)
 
+(use-package counsel
+  :defer t)
 
 (use-package company
   :hook (prog-mode . global-company-mode))
@@ -28,6 +30,7 @@
     :non-normal-prefix "C-,")
   (spc-leader-def
     "SPC" 'counsel-M-x
+	"gg" 'magit-status
     "yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
     "yy" 'my-youdao-search-at-point
     "ys" 'ivy-yasnippet
@@ -52,7 +55,7 @@
     )
   (global-set-key (kbd "s-/") 'comment-line)
   (global-set-key (kbd "C-S-p") 'counsel-switch-buffer)
-  (global-set-key (kbd "C-s") 'save-buffer)
+  (global-set-key (kbd "M-s") 'save-buffer)
   (global-set-key (kbd "s-;") 'yas-expand)
   (global-set-key (kbd "C-x p") '+treemacs/toggle)
   (global-set-key (kbd "C-x k") 'kill-current-buffer)

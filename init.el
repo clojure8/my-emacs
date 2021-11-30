@@ -27,12 +27,12 @@
 ;; Optimize: Force "elisp" "lisp"" and "site-lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
   "Update `load-path'."
-  (dolist (dir '("elisp"))
+  (dolist (dir '("modules"))
 	(push (expand-file-name dir user-emacs-directory) load-path)))
 
 (defun add-subdirs-to-load-path (&rest _)
   "Add subdirectories to `load-path'."
-  (let ((default-directory (expand-file-name "elisp" user-emacs-directory)))
+  (let ((default-directory (expand-file-name "modules" user-emacs-directory)))
     (normal-top-level-add-subdirs-to-load-path)))
 
 (advice-add #'package-initialize :after #'update-load-path)
@@ -41,12 +41,11 @@
 (update-load-path)
 
 ;; emacs deamon
-(server-start)
+(add-hook 'after-init-hook #'server-start)
 
 
 (require 'init-package-manager)
 (require 'init-system)
-
 (require 'init-ui)
 (require 'init-editor)
 (require 'init-lang)
