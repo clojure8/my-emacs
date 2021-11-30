@@ -33,6 +33,7 @@
     "yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
     "yy" 'my-youdao-search-at-point
     "ys" 'ivy-yasnippet
+	"oc" 'org-capture
     "fr" 'counsel-recentf
     "bb" 'counsel-switch-buffer
     "bl" 'evil-switch-to-windows-last-buffer
