@@ -138,38 +138,9 @@ Version 2017-11-01"
 ;;==================================================
 (use-package mood-line
   :straight
-  (mood-line :host github :repo "clojure8/mood-line"))
-
-
-(use-package mini-modeline
-  :after mood-line
-  :config
-  (setq mini-modeline-face-attr '(:background "ffffff"))
-  (face-spec-set 'mini-modeline-mode-line
-				 '((((background light))
-					:background "#aa0000" :height 0.12 :box nil)
-				   (t
-					:background "#aa0000" :height 0.12 :box nil)))
-  (setq mini-modeline-l-format '(" "
-								 (:eval (mood-line-segment-modified))
-								 ;; (:eval (mood-line-segment-buffer-name))
-								 (:eval "")
-								 (:eval (buffer-name))
-								 (:eval "   ")
-								 (:eval (mood-line-segment-anzu))
-								 (:eval (mood-line-segment-multiple-cursors))
-								 (:eval (mood-line-segment-position))))
-  (setq mini-modeline-r-format
-        '((:eval (mood-line-segment-eol))
-          (:eval (mood-line-segment-encoding))
-          (:eval (mood-line-segment-vc))
-          (:eval (mood-line-segment-major-mode))
-          (:eval (mood-line-segment-misc-info))
-          (:eval (mood-line-segment-flycheck))
-          (:eval (mood-line-segment-flymake))
-          (:eval (mood-line-segment-process))
-          " "))
-  (mini-modeline-mode t))
+  (mood-line :host github :repo "clojure8/mood-line")
+  :hook
+  (after-init . mood-line-mode))
 
 
 ;;==================================================
