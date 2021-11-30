@@ -1,23 +1,3 @@
-;;==================================================
-;; 初始化scratch设置 
-;;==================================================
-; (defun xah-new-empty-buffer ()
-;   "Create a new empty buffer.
-; New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc.
-
-; It returns the buffer (for elisp programing).
-
-; URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
-; Version 2017-11-01"
-;   (interactive)
-;   (let (($buf (generate-new-buffer "untitled")))
-;     (switch-to-buffer $buf)
-;     (text-mode)
-;     (setq buffer-offer-save t)
-;     $buf
-;     ))
-; ;; (setq initial-major-mode (quote text-mode))
-; (setq initial-buffer-choice 'xah-new-empty-buffer)
 
 ;;==================================================
 ;; utf8
@@ -37,7 +17,7 @@
 ;;==================================================
 ;; 设置默认的目录
 ;;==================================================
-(csetq default-directory "~")
+(csetq default-directory "~/.emacs.d/")
 ;; 去除counsel默认开头
 ;(setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
 
@@ -71,15 +51,9 @@
 ;; 零散的一些设置
 ;;==================================================
 (csetq tab-width 4)
-(setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
 (setq inhibit-splash-screen t)
-(global-hl-line-mode t)
-;;改鼠标为光标
-;; (setq-default cursor-type 'bar)
-;; (add-hook 'prog-hook 'prettify-symbols-mode)
+(add-hook 'after-init-hook 'global-hl-line-mode)
 
 ;;==================================================
 ;; 显示行号
@@ -113,23 +87,23 @@
   :config
   (load-theme 'leuven t))
 
-; (use-package doom-themes
-;   :config
-;   ;; Global settings (defaults)
-;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-;   (load-theme 'doom-one t)
-;   ;; (load-theme 'doom-fairy-floss t)
-;   ;;(load-theme 'doom-acario-dark t)
-;   ;; Enable flashing mode-line on errors
-;   (doom-themes-visual-bell-config)
-;   ;; Enable custom neotree theme (all-the-icons must be installed!)
-;   (doom-themes-neotree-config)
-;   ;; or for treemacs users
-;   (setq doom-themes-treemacs-theme "doom-colors") 
-;   (doom-themes-treemacs-config)
-;   ;; Corrects (and improves) org-mode's native fontification.
-;   (doom-themes-org-config))
+										; (use-package doom-themes
+										;   :config
+										;   ;; Global settings (defaults)
+										;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+										;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+										;   (load-theme 'doom-one t)
+										;   ;; (load-theme 'doom-fairy-floss t)
+										;   ;;(load-theme 'doom-acario-dark t)
+										;   ;; Enable flashing mode-line on errors
+										;   (doom-themes-visual-bell-config)
+										;   ;; Enable custom neotree theme (all-the-icons must be installed!)
+										;   (doom-themes-neotree-config)
+										;   ;; or for treemacs users
+										;   (setq doom-themes-treemacs-theme "doom-colors") 
+										;   (doom-themes-treemacs-config)
+										;   ;; Corrects (and improves) org-mode's native fontification.
+										;   (doom-themes-org-config))
 
 
 
@@ -138,9 +112,46 @@
 ;;==================================================
 (use-package mood-line
   :straight
-  (mood-line :host github :repo "clojure8/mood-line")
-  :hook
-  (after-init . mood-line-mode))
+  (mood-line :host github :repo "clojure8/mood-line"))
+
+(use-package mini-modeline
+  :after mood-line
+  :config
+  (setq mini-modeline-face-attr '(:background "ffffff"))
+  (face-spec-set 'mini-modeline-mode-line
+                 '((((background light))
+                    :background "#aa0000" :height 0.12 :box nil)
+                   (t
+                    :background "#aa0000" :height 0.12 :box nil)))
+  (defun my/mood-line-segment-position ()
+	"Displays the current cursor position in the mode-line."
+	(concat "%l:%c"
+			(when mood-line-show-cursor-point (propertize (format ":%d" (point)) 'face 'mood-line-unimportant))
+			(propertize " %p  " 'face 'mood-line-unimportant)))
+  (defun my/mood-line-segment-major-mode ()
+	"Displays the current major mode in the mode-line."
+	(concat (format-mode-line (car mode-name) 'mood-line-major-mode) "  "))
+
+  (setq mini-modeline-l-format '(" "
+                                 (:eval (mood-line-segment-modified))
+                                 ;; (:eval (mood-line-segment-buffer-name))
+                                 (:eval "")
+                                 (:eval (buffer-name))
+                                 (:eval "   ")
+                                 (:eval (mood-line-segment-anzu))
+                                 (:eval (mood-line-segment-multiple-cursors))
+                                 (:eval (my/mood-line-segment-position))))
+  (setq mini-modeline-r-format
+        '((:eval (mood-line-segment-eol))
+          (:eval (mood-line-segment-encoding))
+          (:eval (mood-line-segment-vc))
+          (:eval (my/mood-line-segment-major-mode))
+          (:eval (mood-line-segment-misc-info))
+          (:eval (mood-line-segment-flycheck))
+          (:eval (mood-line-segment-flymake))
+          (:eval (mood-line-segment-process))
+          " "))
+  (mini-modeline-mode t))
 
 
 ;;==================================================
