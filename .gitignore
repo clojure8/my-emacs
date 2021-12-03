@@ -1,6 +1,7 @@
-auto-save-list/
-straight/
-recentf
+bookmarks
 .local/
+auto-save-list/
 projectile-bookmarks.eld
+recentf
+straight/
 transient/

@@ -1,3 +1,4 @@
+;; -*- coding: utf-8; lexical-binding: t; -*-
 
 (defgroup my-proxy nil
   "my proxy"

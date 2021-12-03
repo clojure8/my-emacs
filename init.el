@@ -1,9 +1,5 @@
-;;; init.el --- the entry of emacs config -*- lexical-binding: t -*-
+;; -*- coding: utf-8; lexical-binding: t; -*-
 
-;; Author: wpt
-;; Version: 1.0
-
-;;; Code:
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "Emacs ready in %s with %d garbage collections."
@@ -44,6 +40,22 @@
 (add-hook 'after-init-hook #'server-start)
 
 
+;; load all modules
+(defun my-load-all-in-directory (dir)
+  "`load' all elisp libraries in directory DIR which are not already loaded."
+  (interactive "D")
+  (let ((libraries-loaded (mapcar #'file-name-sans-extension
+                                  (delq nil (mapcar #'car load-history)))))
+    (dolist (file (directory-files dir t ".+\\.elc?$"))
+      (let ((library (file-name-sans-extension file)))
+        (unless (member library libraries-loaded)
+          (load library nil t)
+          (push library libraries-loaded))))))
+
+(require 'my-proxy)
+(add-hook 'after-init-hook 'my-proxy-mode)
+
+
 (require 'init-package-manager)
 (require 'init-system)
 (require 'init-ui)
@@ -53,7 +65,3 @@
 (require 'init-tools)
 
 
-;;; Init.el ends here
-;; Local Variables:
-;; byte-compile-warnings: (not unresolved obsolete)
-;; End:

@@ -1,8 +1,5 @@
-;;; init-system.el --- configs for startup -*- lexical-binding: t -*-
-;;; Commentary:
-;; (c) Cabins Kong, 2020-2021
+;; -*- coding: utf-8; lexical-binding: t; -*-
 
-;;; Code:
 
 ;;; Emacs 28 native compile
 (when (and (>= emacs-major-version 28)
@@ -64,6 +61,73 @@
 ;; solve the Chinese paste issue
 (unless (memq system-type '(cygwin windows-nt ms-dos))
   selection-coding-system 'utf-8)
+
+(use-package evil
+  :hook (after-init . evil-mode)
+  :init
+  (csetq evil-want-keybinding nil)
+  )
+
+(use-package evil-collection
+  :after evil
+  :init
+  (csetq evil-want-keybinding nil)
+  :config
+  (add-hook 'after-init-hook 'evil-collection-init))
+
+(use-package general
+  :config
+  (general-define-key
+   "M-p" 'counsel-switch-buffer
+   "M-z" 'evil-undo
+   "M-x" 'counsel-M-x
+   "s-x" 'counsel-M-x
+   "M-v" 'evil-paste-after
+   "s-/" 'comment-line
+   "M-/" 'comment-line
+   "M-f" 'swiper
+   "C-S-p" 'counsel-switch-buffer
+   "M-s" 'save-buffer
+   "s-;" 'yas-expand
+   "C-x p" '+treemacs/toggle
+   "C-x k" 'kill-current-buffer
+   "C-c C-c" 'er/expand-region)
+  (general-create-definer spc-leader-def
+	:states '(normal insert visual emacs)
+	:prefix "<SPC>"
+	:non-normal-prefix "C-,")
+  (spc-leader-def
+	"SPC" 'counsel-M-x
+	"yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
+	"yy" 'my-youdao-search-at-point
+	"ys" 'ivy-yasnippet
+	"oc" 'org-capture
+	"fr" 'counsel-recentf
+	"bb" 'counsel-switch-buffer
+	"bl" 'evil-switch-to-windows-last-buffer
+	"ff" 'counsel-find-file
+	"fs" 'swiper
+	"bk" 'kill-current-buffer
+	"gs" 'magit-status
+	"gd" 'magit-dispatch
+	"ar" 'anzu-replace-at-cursor-thing
+	"aa" 'anzu-query-replace-at-cursor
+	"pf" 'counsel-projectile-find-file
+	"fp" 'counsel-projectile-find-file
+	"pp" 'counsel-projectile-switch-project
+	"pa" 'projectile-add-known-project
+	"pr" 'counsel-projectile-rg
+	"op" '+treemacs/toggle
+	"jj" 'dumb-jump-go
+	"jb" 'dumb-jump-back
+	"cr" 'counsel-rg
+	)
+
+  )
+
+
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode))
 
 
 (provide 'init-system)
