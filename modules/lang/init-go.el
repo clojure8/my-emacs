@@ -37,4 +37,3 @@
   (push '("*eshell*" :height 15) popwin:special-display-config)
   )
 
-(provide 'init-go)
