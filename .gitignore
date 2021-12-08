@@ -5,3 +5,7 @@ projectile-bookmarks.eld
 recentf
 straight/
 transient/
+custom.el
+.lsp-session-v1
+eshell/
+history

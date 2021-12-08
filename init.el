@@ -17,51 +17,79 @@
 
 
 ;; set the startup default directory, not essential but recommended.
-(setq default-directory "~/")
+(setq default-directory "~/.emacs.d")
 
 ;; Load path
 ;; Optimize: Force "elisp" "lisp"" and "site-lisp" at the head to reduce the startup time.
-(defun update-load-path (&rest _)
-  "Update `load-path'."
-  (dolist (dir '("modules"))
-	(push (expand-file-name dir user-emacs-directory) load-path)))
+;; (defun update-load-path (&rest _)
+;;   "Update `load-path'."
+;;   (dolist (dir '("modules"))
+;; 	(push (expand-file-name dir user-emacs-directory) load-path)))
 
-(defun add-subdirs-to-load-path (&rest _)
-  "Add subdirectories to `load-path'."
-  (let ((default-directory (expand-file-name "modules" user-emacs-directory)))
-    (normal-top-level-add-subdirs-to-load-path)))
+;; (defun add-subdirs-to-load-path (&rest _)
+;;   "Add subdirectories to `load-path'."
+;;   (let ((default-directory (expand-file-name "modules" user-emacs-directory)))
+;;     (normal-top-level-add-subdirs-to-load-path)))
 
-(advice-add #'package-initialize :after #'update-load-path)
-(advice-add #'package-initialize :after #'add-subdirs-to-load-path)
+;; (advice-add #'package-initialize :after #'update-load-path)
+;; (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
 
-(update-load-path)
+;; (update-load-path)
 
-;; emacs deamon
+;; ;; emacs deamon
 (add-hook 'after-init-hook #'server-start)
 
+;; ----------------------------------------------------------------------------------------------------
+;; package manager
+;; ----------------------------------------------------------------------------------------------------
+(setq package-archives '(
+                         ("melpa" . "https://mirrors.163.com/elpa/melpa/")
+                         ("melpa-stable" . "https://mirrors.163.com/elpa/melpa-stable/")))
 
+(package-initialize)
+
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+     (bootstrap-version 5))
+ ; (unless (file-exists-p bootstrap-file)
+ ;   (with-current-buffer
+ ;       (url-retrieve-synchronously
+ ;        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+ ;        'silent 'inhibit-cookies)
+ ;     (goto-char (point-max))
+ ;     (eval-print-last-sexp)))
+ (load bootstrap-file nil 'nomessage))
+
+;; Install use-package
+(straight-use-package 'use-package)
+
+;; Configure use-package to use straight.el by default
+(use-package straight
+  :custom (straight-use-package-by-default t))
+
+(straight-use-package 'el-patch)
+
+
+
+;; ----------------------------------------------------------------------------------------------------
 ;; load all modules
-(defun my-load-all-in-directory (dir)
-  "`load' all elisp libraries in directory DIR which are not already loaded."
-  (interactive "D")
-  (let ((libraries-loaded (mapcar #'file-name-sans-extension
-                                  (delq nil (mapcar #'car load-history)))))
-    (dolist (file (directory-files dir t ".+\\.elc?$"))
-      (let ((library (file-name-sans-extension file)))
-        (unless (member library libraries-loaded)
-          (load library nil t)
-          (push library libraries-loaded))))))
+;; ----------------------------------------------------------------------------------------------------
+(use-package f)
 
-(require 'my-proxy)
-(add-hook 'after-init-hook 'my-proxy-mode)
+(defun load-dir (f libs-loaded)
+  (dolist (file (directory-files f t ".+\\.elc?$"))
+    (let ((library (file-name-sans-extension file)))
+      (unless (member library libs-loaded)
+        (load library nil t)
+		(message "loaded %s" library)
+        (push library libs-loaded)))))
 
+(cl-defun load-modules (&optional (modules-dir "modules"))
+  (setq libs-loaded (mapcar #'file-name-sans-extension (delq nil (mapcar #'car load-history))))
+  (let ((dir (expand-file-name modules-dir user-emacs-directory)))
+	(load-dir dir libs-loaded)
+	(f-directories dir (lambda (d) (load-dir d libs-loaded)))))
 
-(require 'init-package-manager)
-(require 'init-system)
-(require 'init-ui)
-(require 'init-editor)
-(require 'init-lang)
-(require 'init-term)
-(require 'init-tools)
-
-
+(load-modules)

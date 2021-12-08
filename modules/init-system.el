@@ -15,6 +15,8 @@
 (setq elisp-flymake-byte-compile-load-path
       (append elisp-flymake-byte-compile-load-path load-path))
 
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;;; system coding
 ;; although others may add many other settings here,
 ;; but I think the next line is enough
@@ -62,6 +64,9 @@
 (unless (memq system-type '(cygwin windows-nt ms-dos))
   selection-coding-system 'utf-8)
 
+;; 像素滚动
+(add-hook 'after-init-hook #'pixel-scroll-precision-mode)
+
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -92,12 +97,22 @@
    "C-x p" '+treemacs/toggle
    "C-x k" 'kill-current-buffer
    "C-c C-c" 'er/expand-region)
+  (general-create-definer g-leader-def
+	:states '(normal insert visual emacs)
+	:prefix "g"
+	:non-normal-prefix "C-;")
+  (g-leader-def
+	"l" 'centaur-tabs-forward-tab
+	"h" 'centaur-tabs-backward-tab
+	"k" 'centaur-tabs-forward-group
+	"j" 'centaur-tabs-backward-group)
   (general-create-definer spc-leader-def
 	:states '(normal insert visual emacs)
 	:prefix "<SPC>"
 	:non-normal-prefix "C-,")
   (spc-leader-def
 	"SPC" 'counsel-M-x
+	"br" 'revert-buffer
 	"yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
 	"yy" 'my-youdao-search-at-point
 	"ys" 'ivy-yasnippet
@@ -121,17 +136,14 @@
 	"jj" 'dumb-jump-go
 	"jb" 'dumb-jump-back
 	"cr" 'counsel-rg
-	)
+	))
 
-  )
+(use-package savehist)
 
+(use-package undo-tree
+  :hook (after-init . global-undo-tree-mode))
 
 (use-package flycheck
   :hook (after-init . global-flycheck-mode))
 
 
-(provide 'init-system)
-;;; init-system.el ends here
-;; Local Variables:
-;; byte-compile-warnings: (not free-vars unresolved)
-;; End:
