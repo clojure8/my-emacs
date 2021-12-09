@@ -76,9 +76,10 @@
 (use-package evil-collection
   :after evil
   :init
-  (csetq evil-want-keybinding nil)
+  (setq evil-want-keybinding nil)
   :config
-  (add-hook 'after-init-hook 'evil-collection-init))
+  (setq evil-collection-mode-list '(dired magit org))
+  (evil-collection-init))
 
 (use-package general
   :config

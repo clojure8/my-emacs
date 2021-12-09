@@ -19,24 +19,6 @@
 ;; set the startup default directory, not essential but recommended.
 (setq default-directory "~/.emacs.d")
 
-;; Load path
-;; Optimize: Force "elisp" "lisp"" and "site-lisp" at the head to reduce the startup time.
-;; (defun update-load-path (&rest _)
-;;   "Update `load-path'."
-;;   (dolist (dir '("modules"))
-;; 	(push (expand-file-name dir user-emacs-directory) load-path)))
-
-;; (defun add-subdirs-to-load-path (&rest _)
-;;   "Add subdirectories to `load-path'."
-;;   (let ((default-directory (expand-file-name "modules" user-emacs-directory)))
-;;     (normal-top-level-add-subdirs-to-load-path)))
-
-;; (advice-add #'package-initialize :after #'update-load-path)
-;; (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
-
-;; (update-load-path)
-
-;; ;; emacs deamon
 (add-hook 'after-init-hook #'server-start)
 
 ;; ----------------------------------------------------------------------------------------------------
@@ -53,13 +35,13 @@
 (let ((bootstrap-file
       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
      (bootstrap-version 5))
- ; (unless (file-exists-p bootstrap-file)
- ;   (with-current-buffer
- ;       (url-retrieve-synchronously
- ;        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
- ;        'silent 'inhibit-cookies)
- ;     (goto-char (point-max))
- ;     (eval-print-last-sexp)))
+ (unless (file-exists-p bootstrap-file)
+   (with-current-buffer
+       (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+     (goto-char (point-max))
+     (eval-print-last-sexp)))
  (load bootstrap-file nil 'nomessage))
 
 ;; Install use-package
@@ -70,7 +52,6 @@
   :custom (straight-use-package-by-default t))
 
 (straight-use-package 'el-patch)
-
 
 
 ;; ----------------------------------------------------------------------------------------------------
