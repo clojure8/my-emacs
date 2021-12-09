@@ -49,6 +49,7 @@
     "fs" 'swiper
     "bk" 'kill-current-buffer
     "gs" 'magit-status
+    "gg" 'magit-status
     "gd" 'magit-dispatch
     "ar" 'anzu-replace-at-cursor-thing
     "aa" 'anzu-query-replace-at-cursor
