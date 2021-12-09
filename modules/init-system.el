@@ -113,6 +113,9 @@
 	:non-normal-prefix "C-,")
   (spc-leader-def
 	"SPC" 'counsel-M-x
+	"ht" 'counsel-load-theme
+	"ep" 'treemacs-display-current-project-exclusively
+	"op" 'treemacs
 	"br" 'revert-buffer
 	"yv" '(youdao-dictionary-play-voice-at-point :wk "pronounce")
 	"yy" 'my-youdao-search-at-point
@@ -133,10 +136,10 @@
 	"pp" 'counsel-projectile-switch-project
 	"pa" 'projectile-add-known-project
 	"pr" 'counsel-projectile-rg
-	"op" '+treemacs/toggle
 	"jj" 'dumb-jump-go
 	"jb" 'dumb-jump-back
 	"cr" 'counsel-rg
+	"bu" 'xwidget-webkit-browse-url
 	))
 
 (use-package savehist)

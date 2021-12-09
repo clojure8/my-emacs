@@ -9,3 +9,4 @@ custom.el
 .lsp-session-v1
 eshell/
 history
+.cache/
