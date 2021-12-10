@@ -12,7 +12,7 @@
   :init
   (setq evil-want-keybinding nil)
   :config
-  (setq evil-collection-mode-list '(dired magit org))
+  (setq evil-collection-mode-list '(magit org))
   (evil-collection-init))
 
 (use-package ivy-rich

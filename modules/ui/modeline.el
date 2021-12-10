@@ -9,8 +9,6 @@
 (use-package mini-modeline
   :after mood-line
   :hook (after-init . mini-modeline-mode)
-  :init
-  ;; (setq mini-modeline-right-padding 3)
   :config
   ;; Setup flycheck hooks
   (add-hook 'flycheck-status-changed-functions #'mood-line--update-flycheck-segment)
@@ -23,9 +21,15 @@
 
   (setq mini-modeline-face-attr 'default)
 
+  (face-spec-set 'mini-modeline-mode-line-inactive
+				 '((((background light))
+					:background "#29DD96" :height 0.12 :box nil)
+				   (t
+					:background "#29DD96" :height 0.12 :box nil)))
+
   (face-spec-set 'mini-modeline-mode-line
                  '((((background light))
-                    :background "#6699cc" :height 0.2 :box nil)
+                    :background "#aa0000" :Height 0.2 :box nil)
                    (t
                     :background "#aa0000" :height 0.2 :box nil)))
   
