@@ -2,7 +2,7 @@
 
 ;;; code:
 
-(use-package eclipse-theme)
+(use-package eclipse-theme :defer t)
 
 (use-package doom-themes
   :config
@@ -22,3 +22,13 @@
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+
+(use-package apropospriate-theme :defer t)
+
+
+(use-package sublime-themes :defer t)
+
+(use-package kaolin-themes :defer t)
+
+(use-package nimbus-theme :defer t)
+(use-package modus-themes :defer t)

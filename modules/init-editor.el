@@ -26,7 +26,8 @@
   :config
   (use-package prescient :defer t)
   (use-package ivy-prescient :after ivy
-    :hook (after-init . ivy-prescient-mode))
+	:config
+	(ivy-prescient-mode))
   (use-package company-prescient :defer t)
   (use-package orderless
     :defer t
@@ -63,3 +64,21 @@
 (use-package aggressive-indent
   :hook
   (emacs-lisp-mode . aggressive-indent-mode))
+
+(use-package anzu
+  :hook (after-init . global-anzu-mode)
+  :config
+  (use-package evil-anzu
+	:defer t
+	:requires (evil anzu)))
+
+(use-package yasnippet
+  :hook (after-init . yas-global-mode)
+  :config
+  (use-package yasnippet-snippets
+	:defer t)
+  (use-package ivy-yasnippet
+	:after yasnippet
+	:defer t))
+
+  

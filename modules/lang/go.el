@@ -27,13 +27,13 @@
   :hook (go-mode . which-key-mode))
 
 (use-package quickrun
-  :commands quickrun-shell)
+  :commands quickrun)
 
 (use-package popwin
   :hook (after-init . popwin-mode)
   :config
   (push '("*eshell-quickrun*" :height 15) popwin:special-display-config)
   (push '("*quickrun*"  :height 15) popwin:special-display-config)
-  (push '("*eshell*" :height 15) popwin:special-display-config)
-  )
+  (push '("*eshell*" :height 15) popwin:special-display-config))
+
 

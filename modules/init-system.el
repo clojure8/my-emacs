@@ -23,6 +23,7 @@
 (prefer-coding-system 'utf-8)
 
 ;;; emacs settings
+(csetq tab-width 4)
 (setq auto-save-default nil	   ; disable auto save
       tab-width 4
       auto-window-vscroll nil
@@ -65,6 +66,12 @@
 ;; solve the Chinese paste issue
 (unless (memq system-type '(cygwin windows-nt ms-dos))
   selection-coding-system 'utf-8)
+
+(defvar temporary-file-directory "~/.emacs.d/.local/tmp")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 ;;==================================================
 ;; utf8

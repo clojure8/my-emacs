@@ -60,18 +60,20 @@
 (use-package f)
 
 (defun load-dir (f libs-loaded)
-  (dolist (file (directory-files f t ".+\\.elc?$"))
+  (dolist (file (directory-files f t ".+\\.el?$"))
     (let ((library (file-name-sans-extension file)))
       (unless (member library libs-loaded)
         (load library nil t)
 		(message "loaded %s" library)
         (push library libs-loaded)))))
 
+(defvar libs-loaded (mapcar #'file-name-sans-extension (delq nil (mapcar #'car load-history))))
+
 (cl-defun load-modules (&optional (modules-dir "modules"))
-  (setq libs-loaded (mapcar #'file-name-sans-extension (delq nil (mapcar #'car load-history))))
   (let ((dir (expand-file-name modules-dir user-emacs-directory)))
 	(load-dir dir libs-loaded)
-	(f-directories dir (lambda (d) (load-dir d libs-loaded)))))
+	(f-directories dir (lambda (d) (load-modules d)))))
 
 (load-modules)
+
 
